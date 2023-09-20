@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="librerias::librerias"></head>
+
+<body>
+    <header>
+        <div th:insert="top::top"></div>
+    </header>
+
+    <div class="container">
+        <h2>Listado de Hilos de la Categoría: <span th:text="${categoria.nombre}"></span></h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Creador</th>
+                    <th>Enlace</th>
+                    <th>Acciones</th> <!-- Agregar columna para acciones -->
+                </tr>
+            </thead>
+            <tbody>
+            	<tr th:if="${hilos.empty}">
+					<td colspan="2"> No hay hilos</td>
+				</tr>
+                <tr th:each="hilo : ${hilos}">
+                    <td th:text="${hilo.id}"></td>
+                    <td th:text="${hilo.titulo}"></td>
+                    <td th:text="${hilo.usuario.username}"></td>
+
+                    <td>
+                        <a th:href="@{/hilos/{id}/posts(id=${hilo.id})}" class="btn btn-primary">Ver posts</a>
+                    </td>
+                    <td>
+                    <!-- Agregar botón para editar el hilo si el usuario actual es el creador, o si es moderador/admin -->
+						<a th:if="${#authentication?.principal?.username == hilo.usuario?.username && hilo.usuario?.username != null}"
+						   th:href="@{/hilos/{id}/editar(id=${hilo.id})}" class="btn btn-info">Editar</a>
+						<a th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}"
+						   th:href="@{/hilos/{id}/editar(id=${hilo.id})}" class="btn btn-info">Editar</a>
+						
+						<!-- Agregar botón para eliminar el hilo si el usuario actual es el creador, o si es moderador/admin -->
+						<button th:if="${#authentication?.principal?.username == hilo.usuario?.username && hilo.usuario?.username != null}"
+						        class="btn btn-danger" data-toggle="modal" data-target="#confirmarEliminacionModal">Eliminar</button>
+						<button th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}"
+						        class="btn btn-danger" data-toggle="modal" data-target="#confirmarEliminacionModal">Eliminar</button>
+
+
+                        <!-- Modal de confirmación de eliminación -->
+					    <div class="modal fade" id="confirmarEliminacionModal" tabindex="-1" role="dialog" aria-labelledby="confirmarEliminacionModalLabel" aria-hidden="true">
+					        <div class="modal-dialog" role="document">
+					            <div class="modal-content">
+					                <div class="modal-header">
+					                    <h5 class="modal-title" id="confirmarEliminacionModalLabel">Confirmar eliminación</h5>
+					                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					                        <span aria-hidden="true">&times;</span>
+					                    </button>
+					                </div>
+					                <div class="modal-body">
+					                    <p>¿Estás seguro de que deseas eliminar el hilo?</p>
+					                </div>
+					                <div class="modal-footer">
+					                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+					                    <a th:href="@{/hilos/{id}/eliminar(id=${hilo.id})}" class="btn btn-danger">Eliminar</a>
+					                </div>
+					            </div>
+					        </div>
+					    </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <a th:href="@{/categorias/{idCategoria}/hilos/nuevo(idCategoria=${categoria.id})}" class="btn btn-success">Crear Hilo</a>
+        <!-- Botón de volver -->
+		<a class="btn btn-secondary" href="/categorias">Volver</a>
+    	
+    </div>
+</body>
+</html>
+

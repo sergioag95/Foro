@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head th:insert="librerias::librerias">
+	
+</head>
+<body>
+	<header sec:authorize="isAuthenticated()">
+		<div th:insert="top::top"></div>
+	</header>
+
+	<div class="container">
+		<h1>Index en Spring</h1>
+
+		<li sec:authorize="isAnonymous()" class="nav-link text-gray-600">
+			<a class="btn btn-primary btn-sm" href="/login">Login</a>
+		</li>
+	</div>
+</body>
+</html>

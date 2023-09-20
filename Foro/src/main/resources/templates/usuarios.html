@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="librerias::librerias">
+    <meta charset="UTF-8">
+    <title>Usuarios</title>
+</head>
+<body>
+<header>
+    <div th:insert="top::top"></div>
+</header>
+<div class="container">
+    <h1>Usuarios</h1>
+
+    <h2>Listado de Usuarios</h2>
+    <table class="table table-striped">
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Correo</th>
+            <th>Posts Escritos</th>
+            <th>Tipo de Usuario</th>
+            <th th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}">Acciones</th>
+        </tr>
+        <tr th:if="${listaUsuarios.empty}">
+            <td colspan="4">No hay usuarios registrados</td>
+        </tr>
+        <tr th:each="usuario : ${listaUsuarios}">
+            <td th:text="${usuario.id}"></td>
+            <td th:text="${usuario.username}"></td>
+            <td th:text="${usuario.email}"></td>
+            <td th:text="${usuario.numeroPosts}"></td>
+            <td>
+                <span th:if="${usuario.roles.contains('ROLE_ADMIN')}">Administrador</span>
+                <span th:if="${usuario.roles.contains('ROLE_MOOD')}">Moderador</span>
+                <span th:if="${usuario.roles.contains('ROLE_USER')}">Usuario</span>
+            </td>
+            <td>
+              	<a th:href="@{/usuarios/delete/__${usuario.id}__}" class="btn btn-danger"
+                   th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}">Eliminar</a>
+
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

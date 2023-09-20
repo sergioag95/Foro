@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Post</title>
+</head>
+<body>
+    <h1>Create a New Post</h1>
+    <form action="#" th:action="@{/posts/create}" th:object="${post}" method="post">
+        <label>Title:</label><br>
+        <input type="text" th:field="*{title}" required><br><br>
+        <label>Content:</label><br>
+        <textarea rows="4" cols="50" th:field="*{content}" required></textarea><br><br>
+        <input type="submit" value="Create">
+    </form>
+            <br>
+
+      <!-- Botón de volver -->
+    <button onclick="history.back()" class="btn btn-secondary">Volver</button>
+</body>
+</html>

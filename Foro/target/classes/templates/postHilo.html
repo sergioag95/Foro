@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="librerias::librerias"></head>
+
+<body>
+
+<header>
+    <div th:insert="top::top"></div>
+</header>
+
+<div class="container">
+    <h2>Posts del Hilo: <span th:text="${hilo.titulo}"></span></h2>
+    <br>
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">Posts</div>
+                <div class="card-body">
+                
+                <tr th:if="${listaPosts.empty}">
+				<td colspan="2"> No hay posts para este hilo todavía</td>
+				</tr>
+                
+                    <!-- ... Código existente ... -->
+
+                    <div th:each="post : ${listaPosts}" class="mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="card-title">
+									Fecha: <small>
+									    <span th:if="${post.fecha != null}" th:text="${#temporals.format(post.fecha, 'yyyy-MM-dd HH:mm:ss')}"></span>
+									    <span th:unless="${post.fecha != null}">Este post ha sido editado</span>
+									</small>
+                                </p>
+								<h5 class="card-title" th:text="${post.usuario != null ? post.usuario.username : 'Usuario desconocido'}"></h5>
+
+                                <p class="card-text" th:text="${post.contenido}"></p>
+
+
+                                <!-- Botón de edición -->
+                                <a th:href="@{/hilo/editarPost(idPost=${post.id})}"
+                                   th:if="${#authentication?.principal?.username == post.usuario?.username && post.usuario?.username != null}"
+                                   class="btn btn-primary">Editar</a>
+                                   
+                                   <!-- Botón de edición para admins y moderadores -->
+                                <a th:href="@{/hilo/editarPost(idPost=${post.id})}"
+                                     th:if="${#authorization.expression('hasAuthority(''ROLE_MOOD'') or hasAuthority(''ROLE_ADMIN'')')}"
+                                   class="btn btn-primary">Editar</a>
+
+                                <!-- Botón de borrado -->
+                                <form th:action="@{/borrarPost}" method="post"
+                                      th:if="${#authentication?.principal?.username == post.usuario?.username && post.usuario?.username != null}">
+                                    <input type="hidden" name="idPost" th:value="${post.id}" />
+                                    <button type="submit" class="btn btn-danger">Borrar</button>
+                                </form>
+
+                                <!-- Botón de borrado (para admins y moderadores) -->
+                                <form th:action="@{/borrarPost}" method="post"
+                                     th:if="${#authorization.expression('hasAuthority(''ROLE_MOOD'') or hasAuthority(''ROLE_ADMIN'')')}">
+                                    <input type="hidden" name="idPost" th:value="${post.id}" />
+                                    <button type="submit" class="btn btn-danger">Borrar</button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ... Código existente ... -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Verificar si hay usuario registrado -->
+    <div sec:authorize="isAuthenticated()">
+        <h2>Crear un nuevo post:</h2>
+
+        <form action="#" th:if="${#authentication.isAuthenticated()}"
+              th:action="@{/hilo/crearPost(idHilo=${hilo.id})}" th:object="${nuevoPost}" method="post">
+            <div class="form-group">
+                <label for="contenido">Contenido:</label>
+                <textarea class="form-control" id="contenido" name="contenido" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Publicar</button>
+        </form>
+    </div>
+    <br>
+    <div sec:authorize="!isAuthenticated()" class="m-auto text-center">
+    <!-- Mensaje para usuarios no autenticados -->
+    <p>Si quieres participar en el foro, regístrate.</p>
+</div>
+
+    <!-- Si no hay usuario registrado, mostrar mensaje de inicio de sesión -->
+    <div th:unless="${#authentication.isAuthenticated()}">
+        <p>Inicia sesión para poder publicar.</p>
+    </div>
+
+    <br>
+    <!-- Botón de volver -->
+    <button onclick="history.back()" class="btn btn-secondary">Volver</button>
+
+</div>
+</body>
+</html>
