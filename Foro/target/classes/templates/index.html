@@ -1,19 +1,117 @@
 <!DOCTYPE html>
 <html>
-<head th:insert="librerias::librerias">
-	
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+
+        video#video_background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cover.black {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .welcome-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #fff;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 36px;
+        }
+
+        .button-container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .custom-button {
+            display: block;
+            margin: 10px 0;
+            padding: 15px 30px;
+            background-color: #ff5722;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .custom-button:hover {
+            background-color: #e64a19;
+        }
+
+        .follow-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .follow-icon {
+            font-size: 32px;
+            margin: 0 10px;
+        }
+    </style>
 </head>
 <body>
-	<header sec:authorize="isAuthenticated()">
-		<div th:insert="top::top"></div>
-	</header>
 
-	<div class="container">
-		<h1>Index en Spring</h1>
+    <div>
+        <video id="video_background" preload="auto" autoplay="true" loop="loop" muted="muted">
+            <source src="../public/videos/video-portada.mp4" type="video/mp4">
+            Video not supported
+        </video>
 
-		<li sec:authorize="isAnonymous()" class="nav-link text-gray-600">
-			<a class="btn btn-primary btn-sm" href="/login">Login</a>
-		</li>
-	</div>
+        <div class="cover black" data-color="black"></div>
+
+        <div class="welcome-message">
+            <h1 style="font-family: 'Open Sans', sans-serif; font-size: 48px;">¡Bienvenido a Nuestra Página!</h1>
+            <p>Seleccione una opción:</p>
+            <div class="button-container">
+                <a href="login" class="custom-button" style="background-color: #007bff;">Iniciar Sesión</a>
+                <a href="usuarios/registro" class="custom-button" style="background-color: #28a745;">Registrarse</a>
+            </div>
+            <a href="categorias" class="custom-button" style="background-color: #6c757d;">Entrar como Invitado</a>
+            
+            <div class="follow-section">
+            <p>Síguenos en:</p>
+            <a href="#" class="follow-icon"><i class="fab fa-instagram"></i></a> <!-- Ícono de Instagram (requiere FontAwesome) -->
+            <a href="#" class="follow-icon"><i class="fab fa-facebook"></i></a> <!-- Ícono de Facebook (requiere FontAwesome) -->
+            <a href="#" class="follow-icon"><i class="fab fa-tiktok"></i></a> <!-- Ícono de TikTok (requiere FontAwesome) -->
+        </div>
+        </div>
+
+        
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
+
+

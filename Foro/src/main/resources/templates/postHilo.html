@@ -9,8 +9,23 @@
 </header>
 
 <div class="container">
+<br>
     <h2>Posts del Hilo: <span th:text="${hilo.titulo}"></span></h2>
     <br>
+    
+     <!-- Verificar si hay usuario registrado -->
+    <div sec:authorize="isAuthenticated()">
+        <h2>Crear un nuevo post:</h2>
+
+        <form action="#" th:if="${#authentication.isAuthenticated()}"
+              th:action="@{/hilo/crearPost(idHilo=${hilo.id})}" th:object="${nuevoPost}" method="post">
+            <div class="form-group">
+                <label for="contenido">Contenido:</label>
+                <textarea class="form-control" id="contenido" name="contenido" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Publicar</button>
+        </form>
+    </div>
     <div class="row">
         <div class="col-md-8 offset-md-2">
             <div class="card">
@@ -72,19 +87,7 @@
         </div>
     </div>
 
-    <!-- Verificar si hay usuario registrado -->
-    <div sec:authorize="isAuthenticated()">
-        <h2>Crear un nuevo post:</h2>
-
-        <form action="#" th:if="${#authentication.isAuthenticated()}"
-              th:action="@{/hilo/crearPost(idHilo=${hilo.id})}" th:object="${nuevoPost}" method="post">
-            <div class="form-group">
-                <label for="contenido">Contenido:</label>
-                <textarea class="form-control" id="contenido" name="contenido" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Publicar</button>
-        </form>
-    </div>
+   
     <br>
     <div sec:authorize="!isAuthenticated()" class="m-auto text-center">
     <!-- Mensaje para usuarios no autenticados -->

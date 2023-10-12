@@ -39,7 +39,7 @@
 
 
 
-			<nav class="navbar navbar-expand  navbar-dark bg-dark box-shadow" sec:authorize="isAuthenticated()">
+			<nav class="navbar navbar-expand  navbar-dark bg-dark box-shadow">
 
 				<!-- Sidebar Toggle (Topbar) -->
 				<button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -66,7 +66,7 @@
 					</li>
 
 					<div class="topbar-divider d-none d-sm-block"></div>
-					<li class="nav-item dropdown no-arrow">
+					<li th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}" class="nav-item dropdown no-arrow" >
 						<a class="nav-link text-gray-600" href="/usuarios" role="button">
 							<i class="fas fa-users fa-sm fa-fw mr-3 text-gray-600"></i>
 							Usuarios

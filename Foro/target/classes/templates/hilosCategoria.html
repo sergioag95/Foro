@@ -6,7 +6,7 @@
     <header>
         <div th:insert="top::top"></div>
     </header>
-
+	<br>
     <div class="container">
         <h2>Listado de Hilos de la Categoría: <span th:text="${categoria.nombre}"></span></h2>
         <table class="table table-striped">
@@ -16,7 +16,7 @@
                     <th>Título</th>
                     <th>Creador</th>
                     <th>Enlace</th>
-                    <th>Acciones</th> <!-- Agregar columna para acciones -->
+                    <th sec:authorize="isAuthenticated()">Acciones</th> <!-- Agregar columna para acciones -->
                 </tr>
             </thead>
             <tbody>
@@ -31,7 +31,7 @@
                     <td>
                         <a th:href="@{/hilos/{id}/posts(id=${hilo.id})}" class="btn btn-primary">Ver posts</a>
                     </td>
-                    <td>
+                    <td sec:authorize="isAuthenticated()">
                     <!-- Agregar botón para editar el hilo si el usuario actual es el creador, o si es moderador/admin -->
 						<a th:if="${#authentication?.principal?.username == hilo.usuario?.username && hilo.usuario?.username != null}"
 						   th:href="@{/hilos/{id}/editar(id=${hilo.id})}" class="btn btn-info">Editar</a>
@@ -70,7 +70,13 @@
             </tbody>
         </table>
         
-        <a th:href="@{/categorias/{idCategoria}/hilos/nuevo(idCategoria=${categoria.id})}" class="btn btn-success">Crear Hilo</a>
+         <div th:unless="${#authorization.expression('isAuthenticated()')}">
+    	    <p>Debe iniciar sesión para crear hilos.</p>
+	    </div>
+         <div sec:authorize="isAuthenticated()">
+        	<a th:href="@{/categorias/{idCategoria}/hilos/nuevo(idCategoria=${categoria.id})}" class="btn btn-success">Crear Hilo</a>
+        	<br>
+         </div>
         <!-- Botón de volver -->
 		<a class="btn btn-secondary" href="/categorias">Volver</a>
     	
