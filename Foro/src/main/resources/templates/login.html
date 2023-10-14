@@ -1,100 +1,105 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mi página web</title>
+  <!-- Enlaces para los archivos de Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <style>
 
+.gradient-custom {
+/* fallback for old browsers */
+background:#ad0405;
+
+/* Chrome 10-25, Safari 5.1-6 */
+background: -webkit-linear-gradient(to right,#ad0405,rgb(20, 0, 0));
+
+/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+background: linear-gradient(to right,rgb(20, 0, 0),#ad0405);
+
+}
+
+span{
+	font-size:100px;
+	margin-left:40px;
+	position:fixed
+}
+
+.breadcrumb-item a {
+  color: white;
+  text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+  color: #D5D5D5;
+  text-decoration: underline;
+}
+</style>
 <head th:insert="librerias">
+
 </head>
 
 <body>
 
-  <header>
+<form method="post" action="/login">
 
-    <div th:insert="top::top"></div>
+<section class="vh-100 gradient-custom">
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="#" onclick="history.go(-1);"><span>&#8592;</span></a></li>
+  </ol>
+</nav>
+  <div class="container py-5 h-50">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card bg-dark text-white" style="border-radius: 1rem;">
+          <div class="card-body p-5 text-center">
 
-  </header>
-  <div class="container">
+            <div class="mb-md-5 mt-md-4 pb-5">
 
-    <div class="row">
+              <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
 
-      <div class="col-4 mt-5 m-auto">
-        <h1 class="h3 text-grey-900">Acceso al sistema</h1>
-
-        <div th:if="${param.error}">
-          <p class="alert alert-danger btn-sm m-2">Usuario o contraseña incorrectos</p>
-        </div>
-
-        <div th:if="${param.exito}">
-          <p class="alert alert-info">Registrado correctamente, introduce usuario y contraseña</p>
-        </div>
-
-        <div th:if="${param.logout}">
-          <p class="alert alert-info">Sesión cerrada correctamente</p>
-        </div>
-
-        <form method="post" action="/login">
-
-          <div class="form-row">
-
-            <div class="form-group col-8">
-
-              <label for="inputnombre">Usuario/a</label>
-              <input placeholder="Usuario" type="text" id="username" name="username" required="true"
-                class="form-control text-grey-900" />
-
-            </div>
-
-          </div>
-
-          <div class="form-row">
-
-            <div class="form-group col-8">
-
-              <label for="inputPass">Contraseña</label>
-
-              <div class="input-group" id="show_hide_password">
-                <input placeholder="Password" type="password" name="password" id="password"
-                  required="true" class="form-control text-grey-900" />
-
-                <div class="input-group-text">
-                  <a href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
-                </div>
+              <div class="form-outline form-white mb-4">
+               <label for="inputnombre">Usuario/a</label>
+				<input placeholder="Usuario" type="text" id="username" name="username" required="true" class="form-control text-grey-900" />
 
               </div>
 
-            </div>
+              <div class="form-outline form-white mb-4">
+                <label for="inputPass">Contraseña</label>
 
-          </div>
+							<div class="input-group" id="show_hide_password">
+								<input placeholder="Password" type="password" name="password" id="password"
+									required="true" class="form-control text-grey-900" />
 
-          <div class="form-row m-auto">
-            <input type="submit" value="Acceder" class="btn btn-primary float-right mt-3">
-          </div>
+								<div class="input-group-text">
+									<a href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+								</div>
 
-          <div class="form-row m-auto">
-            <br><a href="/forgot" class="float-left mt-5 mr-3">
-              ¿Has olvidado tu contraseña?</a>
-          </div>
-
-        </form>
-        
-         <div th:unless="${param.exito}">
-            <div class="row">
-              <div class="col-8 mt-5">
-                <div class="col-8">
-                  <label for="inputSinRegistro">¿Aún no tienes cuenta?</label>
-                  <a class="btn btn-primary float-right mt-3 mr-3"
-                    th:href="@{/usuarios/registro}">Regístrate</a>
-                </div>
+					</div>
               </div>
+
+
+              <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
+
+             
+
             </div>
+
+            <div>
+              <p class="mb-0">No tienes cuenta? <a th:href="@{/usuarios/registro}" class="text-white-50 fw-bold">Registrate</a>
+              </p>
+            </div>
+
           </div>
-        
+        </div>
       </div>
-
     </div>
-    
-   
   </div>
+</section>
+<form>
 
 </body>
-
-</html>
-
