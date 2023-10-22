@@ -30,9 +30,9 @@
             <td>
                 <a th:href="@{/categorias/{id}/hilos(id=${categoria.id})}" class="btn btn-info">Ver Hilos</a>
                 <a th:href="@{/categorias/delete/__${categoria.id}__}" class="btn btn-danger" sec:authorize="isAuthenticated()"
-                   th:if="${#authentication?.principal?.username == categoria.usuario?.username && categoria.usuario?.username != null}">Eliminar</a>
-                <a th:href="@{/categorias/delete/__${categoria.id}__}" class="btn btn-danger"
-                   th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}">Eliminar</a>
+                   th:if="${#authentication?.principal?.username == categoria.usuario?.username && categoria.usuario?.username != null || #authorization.expression('hasAuthority(''ROLE_ADMIN'')')}">Eliminar</a>
+                <!--<a th:href="@{/categorias/delete/__${categoria.id}__}" class="btn btn-danger"
+                   th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}">Eliminar</a>-->
             </td>
         </tr>
     </table>

@@ -33,16 +33,14 @@
                     </td>
                     <td sec:authorize="isAuthenticated()">
                     <!-- Agregar botón para editar el hilo si el usuario actual es el creador, o si es moderador/admin -->
-						<a th:if="${#authentication?.principal?.username == hilo.usuario?.username && hilo.usuario?.username != null}"
-						   th:href="@{/hilos/{id}/editar(id=${hilo.id})}" class="btn btn-info">Editar</a>
-						<a th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}"
+						<a th:if="${#authentication?.principal?.username == hilo.usuario?.username && hilo.usuario?.username != null || #authorization.expression('hasAuthority(''ROLE_ADMIN'')')}"
 						   th:href="@{/hilos/{id}/editar(id=${hilo.id})}" class="btn btn-info">Editar</a>
 						
+						
 						<!-- Agregar botón para eliminar el hilo si el usuario actual es el creador, o si es moderador/admin -->
-						<button th:if="${#authentication?.principal?.username == hilo.usuario?.username && hilo.usuario?.username != null}"
+						<button th:if="${#authentication?.principal?.username == hilo.usuario?.username && hilo.usuario?.username != null || #authorization.expression('hasAuthority(''ROLE_ADMIN'')')}"
 						        class="btn btn-danger" data-toggle="modal" data-target="#confirmarEliminacionModal">Eliminar</button>
-						<button th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}"
-						        class="btn btn-danger" data-toggle="modal" data-target="#confirmarEliminacionModal">Eliminar</button>
+						
 
 
                         <!-- Modal de confirmación de eliminación -->
@@ -75,10 +73,9 @@
 	    </div>
          <div sec:authorize="isAuthenticated()">
         	<a th:href="@{/categorias/{idCategoria}/hilos/nuevo(idCategoria=${categoria.id})}" class="btn btn-success">Crear Hilo</a>
-        	<br>
+			<a class="btn btn-secondary" href="/categorias">Volver</a>
          </div>
         <!-- Botón de volver -->
-		<a class="btn btn-secondary" href="/categorias">Volver</a>
     	
     </div>
 </body>
