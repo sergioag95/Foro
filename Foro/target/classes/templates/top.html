@@ -6,7 +6,7 @@
 	<!-- Topbar -->
 
 
-	<div class="collapse bg-dark" id="navbarHeader">
+	<div class="collapse" id="navbarHeader" style="background-color: #A60311;">
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-8 col-md-7 py-4">
@@ -27,6 +27,9 @@
 	</div>
 	<div class="navbar navbar-dark bg-dark box-shadow">
 		<div class="container d-flex justify-content-between">
+
+		<nav class="navbar navbar-expand  navbar-dark bg-dark box-shadow">
+
 			<a href="/" class="navbar-brand d-flex align-items-center">
 				<img src="../../public/images/icon.png" alt="Logo" class="img-fluid" style="width: 100px;">
 			</a>
@@ -34,7 +37,6 @@
 
 
 
-			<nav class="navbar navbar-expand  navbar-dark bg-dark box-shadow">
 
 				<!-- Sidebar Toggle (Topbar) -->
 				<button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -45,25 +47,29 @@
 				<ul class="navbar-nav ml-auto">
 
 					<li class="nav-item">
-						<a class="nav-link text-gray-600" href="/" role="button">
-							<i class="fas fa-home fa-sm fa-fw mr-3 text-gray-600"></i>
-							Inicio
-						</a>
-					</li>
+            <a class="nav-link" href="/" role="button">
+                <i class="fas fa-home" style="font-size: 24px; color: #D98F8F; transition: transform 0.3s ease, color 0.3s ease;"></i>
+                Inicio
+            </a>
+        </li>
 
-					<div class="topbar-divider d-none d-sm-block"></div>
+        <div class="topbar-divider d-none d-sm-block"></div>
 
-					<li class="nav-item dropdown no-arrow">
-						<a class="nav-link text-gray-600" href="/categorias" role="button">
-							<i class="fas fa-calendar-check fa-sm fa-fw mr-3 text-gray-600"></i>
-							Categorias
-						</a>
-					</li>
+        <li class="nav-item dropdown no-arrow">
+            <a class="nav-link" href="/categorias" role="button">
+                <i class="fa-solid fa-list" style="font-size: 24px; color: #D98F8F; transition: transform 0.3s ease, color 0.3s ease;"></i>
+                Categorias
+            </a>
+        </li>
+
+        <div class="topbar-divider d-none d-sm-block"></div>
+
+     
 
 					<div class="topbar-divider d-none d-sm-block"></div>
 					<li th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}" class="nav-item dropdown no-arrow" >
 						<a class="nav-link text-gray-600" href="/usuarios" role="button">
-							<i class="fas fa-users fa-sm fa-fw mr-3 text-gray-600"></i>
+							<i class="fas fa-user fa-sm fa-fw mr-3 text-gray-600" style="font-size: 24px; color: #D98F8F; transition: transform 0.3s ease, color 0.3s ease;"></i>
 							Usuarios
 						</a>
 					</li>
@@ -125,25 +131,23 @@
 						</div>
 					</li>
 					 
-					<div class="topbar-divider d-none d-sm-block">
-
-						<li sec:authorize="isAnonymous()" class="nav-link  text-gray-600">
-							<a class="btn btn-primary btn-sm  " href="/login">Login</a>
-						</li>
-						<li sec:authorize="isAuthenticated()"class="nav-link  text-gray-600">
-						<form th:action="@{/logout}" method="post">
-							<input class="btn btn-primary btn-sm " type="submit" value="Cerrar Sesión" />
-						</form>
-						</li>
-					</div>
+					
 				</ul>
 
 			</nav>
-			<!-- End of Topbar -->
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
-				aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
+			
+			<div class="topbar-divider d-none d-sm-block">
+
+						<li sec:authorize="isAnonymous()" class="nav-link  text-gray-600">
+							<a class="btn btn-primary btn-lg" href="/login">Login</a>
+						</li>
+						<li sec:authorize="isAuthenticated()"class="nav-link  text-gray-600">
+						<form th:action="@{/logout}" method="post">
+							<input class="btn btn-primary btn-lg" type="submit" value="Cerrar Sesión" />
+						</form>
+						</li>
+					</div>
+			
 		</div>
 	</div>
 </div>

@@ -29,7 +29,7 @@
                     <td th:text="${hilo.usuario.username}"></td>
 
                     <td>
-                        <a th:href="@{/hilos/{id}/posts(id=${hilo.id})}" class="btn btn-primary">Ver posts</a>
+                        <a th:href="@{/hilos/{id}/posts(id=${hilo.id})}" class="btn btn-secondary">Ver posts</a>
                     </td>
                     <td sec:authorize="isAuthenticated()">
                     <!-- Agregar botón para editar el hilo si el usuario actual es el creador, o si es moderador/admin -->
