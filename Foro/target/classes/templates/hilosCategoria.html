@@ -8,6 +8,8 @@
     </header>
 	<br>
     <div class="container">
+    <div id="alertMessage" class="alert alert-success" style="display: none;"></div>
+
         <h2>Listado de Hilos de la Categoría: <span th:text="${categoria.nombre}"></span></h2>
         <table class="table table-striped">
             <thead>
@@ -34,7 +36,7 @@
                     <td sec:authorize="isAuthenticated()">
                     <!-- Agregar botón para editar el hilo si el usuario actual es el creador, o si es moderador/admin -->
 						<a th:if="${#authentication?.principal?.username == hilo.usuario?.username && hilo.usuario?.username != null || #authorization.expression('hasAuthority(''ROLE_ADMIN'')')}"
-						   th:href="@{/hilos/{id}/editar(id=${hilo.id})}" class="btn btn-info">Editar</a>
+						   th:onclick="'openEditModal(' + ${hilo.id} + ');'" class="btn btn-info">Editar</a>
 						
 						
 						<!-- Agregar botón para eliminar el hilo si el usuario actual es el creador, o si es moderador/admin -->
@@ -63,7 +65,40 @@
 					            </div>
 					        </div>
 					    </div>
+					    
+					    
                     </td>
+                    
+                    <div class="modal fade" th:id="'editHiloModal' + ${hilo.id}" tabindex="-1" role="dialog" aria-labelledby="editHiloModalLabel" aria-hidden="true">
+						    <div class="modal-dialog" role="document">
+						        <div class="modal-content">
+								<form th:action="@{/categorias/{idCategoria}/hilos/{id}/actualizar(idCategoria=${hilo.categoria.id}, id=${hilo.id})}" method="post">
+						
+						            <div class="modal-header">
+						                <h5 class="modal-title" id="editHiloModalLabel">Editar Hilo</h5>
+						                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						                    <span aria-hidden="true">&times;</span>
+						                </button>
+						            </div>
+						            <div class="modal-body">
+						               <div class="form-group">
+						                        <label for="tituloEdit">Titulo:</label>
+						                        <input type="text" id="tituloEdit" th:name="titulo" th:value="${hilo.titulo}"
+						                               class="form-control" required/>
+						                        <input type="hidden" th:name="id" th:value="${hilo.id}"/>
+						
+						                 </div>
+						            </div>
+						            <div class="modal-footer">
+						                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+						                    <button type="submit" class="btn btn-primary">Guardar</button>
+						            </div>
+						            </form>
+										
+						        </div>
+						    </div>
+						</div>
+                    
                 </tr>
             </tbody>
         </table>
@@ -72,12 +107,76 @@
     	    <p>Debe iniciar sesión para crear hilos.</p>
 	    </div>
          <div sec:authorize="isAuthenticated()">
-        	<a th:href="@{/categorias/{idCategoria}/hilos/nuevo(idCategoria=${categoria.id})}" class="btn btn-success">Crear Hilo</a>
+        	<a th:onclick="openCreateModal();" class="btn btn-success">Crear Hilo</a>
 			<a class="btn btn-secondary" href="/categorias">Volver</a>
          </div>
         <!-- Botón de volver -->
     	
     </div>
+    
+    
+    <div class="modal fade" id="createHiloModal" tabindex="-1" role="dialog" aria-labelledby="createHiloModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+           <form th:object="${hiloNuevo}" th:action="@{/categorias/{idCategoria}/hilos/nuevo(idCategoria=${categoria.id})}" method="post">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="editHiloModalLabel">Crear Categoría</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+               <div class="form-group">
+                        <label for="titulo">Titulo:</label>
+        				<input type="text" id="titulo" name="titulo" class="form-control" required/>
+
+                 </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Crear</button>
+            </div>
+                      </form>
+				
+        
+    </div>
+</div>
+</div>
+
+
+
+
+    
+    
+    <script>
+    function openEditModal(hiloId) {
+    // Genera el ID del modal basado en categoryId
+    var modalId = 'editHiloModal' + hiloId;
+
+    // Abre el modal de edición con el ID generado
+    $('#' + modalId).modal('show');
+}
+    
+   function openCreateModal() {
+    // Abre el modal de creación de categoría
+    $('#createHiloModal').modal('show');
+}
+
+function mostrarAlerta(mensaje) {
+        // Muestra la alerta con el mensaje deseado
+        var alertElement = document.getElementById('alertMessage');
+        alertElement.textContent = mensaje;
+        alertElement.style.display = 'block';
+
+        // Cierra la alerta automáticamente después de unos segundos
+        setTimeout(function () {
+            alertElement.style.display = 'none';
+        }, 5000); // La alerta se ocultará después de 5 segundos (puedes ajustar el tiempo)
+    }
+
+
+</script>
 </body>
 </html>
 

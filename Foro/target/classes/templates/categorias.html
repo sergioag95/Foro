@@ -35,6 +35,37 @@
                    th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}">Eliminar</a>-->
 
             </td>
+            
+            <div class="modal fade" th:id="'editCategoryModal' + ${categoria.id}" tabindex="-1" role="dialog" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+			    <div class="modal-dialog" role="document">
+			        <div class="modal-content">
+			           <form th:object="${categoria}" th:action="@{/categorias/edit}" method="post">
+			
+			            <div class="modal-header">
+			                <h5 class="modal-title" id="editCategoryModalLabel">Editar Categoría</h5>
+			                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			                    <span aria-hidden="true">&times;</span>
+			                </button>
+			            </div>
+			            <div class="modal-body">
+			               <div class="form-group">
+			                        <label for="nombreEdit">Nombre:</label>
+			                        <input type="text" id="nombreEdit" th:name="nombre" th:value="${categoria.nombre}"
+			                               class="form-control" required/>
+			                                            <input type="hidden" th:name="id" th:value="${categoria.id}"/>
+			
+			                 </div>
+			            </div>
+			            <div class="modal-footer">
+			                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+			                    <button type="submit" class="btn btn-primary">Guardar</button>
+			            </div>
+			            </form>
+							
+			        </div>
+			    </div>
+			</div>
+            
         </tr>
     </table>
     
@@ -42,35 +73,7 @@
 
 </div>
 
-<div class="modal fade" id="editCategoryModal" tabindex="-1" role="dialog" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-           <form th:object="${categoria}" th:action="@{/categorias/edit}" method="post" th:each="categoria : ${listaCategorias}">
 
-            <div class="modal-header">
-                <h5 class="modal-title" id="editCategoryModalLabel">Editar Categoría</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-               <div class="form-group">
-                        <label for="nombreEdit">Nombre:</label>
-                        <input type="text" id="nombreEdit" th:name="nombre" th:value="${categoria.nombre}"
-                               class="form-control" required/>
-                                            <input type="hidden" th:name="id" th:value="${categoria.id}"/>
-
-                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-            </div>
-            </form>
-				
-        </div>
-    </div>
-</div>
 
 <div class="modal fade" id="createCategoryModal" tabindex="-1" role="dialog" aria-labelledby="createCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -102,9 +105,13 @@
 
 <script>
     function openEditModal(categoryId) {
-        // Abre el modal de edición con la categoría correspondiente
-        $('#editCategoryModal').modal('show');
-    }
+    // Genera el ID del modal basado en categoryId
+    var modalId = 'editCategoryModal' + categoryId;
+
+    // Abre el modal de edición con el ID generado
+    $('#' + modalId).modal('show');
+}
+
     
    function openCreateModal() {
     // Abre el modal de creación de categoría
