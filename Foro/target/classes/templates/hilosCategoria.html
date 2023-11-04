@@ -8,8 +8,9 @@
     </header>
 	<br>
     <div class="container">
-    <div id="alertMessage" class="alert alert-success" style="display: none;"></div>
-
+	<div class="alert alert-info" th:unless="${#authorization.expression('isAuthenticated()')}">
+    	    <p>Debe iniciar sesión para crear hilos.</p>
+	    </div>
         <h2>Listado de Hilos de la Categoría: <span th:text="${categoria.nombre}"></span></h2>
         <table class="table table-striped">
             <thead>
@@ -36,7 +37,7 @@
                     <td sec:authorize="isAuthenticated()">
                     <!-- Agregar botón para editar el hilo si el usuario actual es el creador, o si es moderador/admin -->
 						<a th:if="${#authentication?.principal?.username == hilo.usuario?.username && hilo.usuario?.username != null || #authorization.expression('hasAuthority(''ROLE_ADMIN'')')}"
-						   th:onclick="'openEditModal(' + ${hilo.id} + ');'" class="btn btn-info">Editar</a>
+						   th:onclick="'openEditModal(' + ${hilo.id} + ');'" class="btn btn-primary">Editar</a>
 						
 						
 						<!-- Agregar botón para eliminar el hilo si el usuario actual es el creador, o si es moderador/admin -->
@@ -103,9 +104,7 @@
             </tbody>
         </table>
         
-         <div th:unless="${#authorization.expression('isAuthenticated()')}">
-    	    <p>Debe iniciar sesión para crear hilos.</p>
-	    </div>
+         
          <div sec:authorize="isAuthenticated()">
         	<a th:onclick="openCreateModal();" class="btn btn-success">Crear Hilo</a>
 			<a class="btn btn-secondary" href="/categorias">Volver</a>
@@ -162,18 +161,6 @@
     // Abre el modal de creación de categoría
     $('#createHiloModal').modal('show');
 }
-
-function mostrarAlerta(mensaje) {
-        // Muestra la alerta con el mensaje deseado
-        var alertElement = document.getElementById('alertMessage');
-        alertElement.textContent = mensaje;
-        alertElement.style.display = 'block';
-
-        // Cierra la alerta automáticamente después de unos segundos
-        setTimeout(function () {
-            alertElement.style.display = 'none';
-        }, 5000); // La alerta se ocultará después de 5 segundos (puedes ajustar el tiempo)
-    }
 
 
 </script>

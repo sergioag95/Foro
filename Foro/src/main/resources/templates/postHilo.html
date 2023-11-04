@@ -10,28 +10,30 @@
 
 <div class="container">
 <br>
-    <h2>Posts del Hilo: <span th:text="${hilo.titulo}"></span></h2>
-    <br>
-    
-     <!-- Verificar si hay usuario registrado -->
-    <div sec:authorize="isAuthenticated()">
-        <h2>Crear un nuevo post:</h2>
 
-        <form action="#" th:if="${#authentication.isAuthenticated()}"
-              th:action="@{/hilo/crearPost(idHilo=${hilo.id})}" th:object="${nuevoPost}" method="post">
-            <div class="form-group">
-                <label for="contenido">Contenido:</label>
-                <textarea class="form-control" id="contenido" name="contenido" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Publicar</button>
-        </form>
-    </div>
+<div sec:authorize="!isAuthenticated()" class="alert alert-info">
+    <!-- Mensaje para usuarios no autenticados -->
+    <p>Si quieres participar en el foro, regístrate.</p>
+</div>    
+ 
     <div class="row">
         <div class="col-md-8 offset-md-2">
             <div class="card">
-                <div class="card-header">Posts</div>
-                <div class="card-body">
-                
+                <div class="card-header">Posts del Hilo: <span th:text="${hilo.titulo}"></span></div>
+                <div class="card-body custom-dark-background">
+                <form action="#" th:if="${#authentication.isAuthenticated()}"
+		              th:action="@{/hilo/crearPost(idHilo=${hilo.id})}" th:object="${nuevoPost}" method="post">
+		            <div class="form-group">
+		                <label for="contenido"></label>
+		                <textarea class="form-control" id="contenido" name="contenido" placeholder="Escribe tu post" required></textarea>
+		            </div>
+		            <div style="display: flex; justify-content: end; margin-top:10px;">
+		            <button type="submit" class="btn btn-primary">Publicar</button>
+		            </div>
+		        </form>
+            <br>
+
+        
                 <tr th:if="${listaPosts.empty}">
 				<td colspan="2"> No hay posts para este hilo todavía</td>
 				</tr>
@@ -41,41 +43,56 @@
                     <div th:each="post : ${listaPosts}" class="mb-3">
                         <div class="card">
                             <div class="card-body">
+                            
+                            
                                 <p class="card-title">
+                                
+                                <div style="display: flex; justify-content: space-between;">
+                                	<div>
 									Fecha: <small>
-									    <span th:if="${post.fecha != null}" th:text="${#temporals.format(post.fecha, 'yyyy-MM-dd HH:mm:ss')}"></span>
-									    <span th:unless="${post.fecha != null}">Este post ha sido editado</span>
+									    <span th:if="${post.fecha == null}" th:unless="${post.fecha == null}" th:text="${#temporals.format(post.fecha, 'yyyy-MM-dd HH:mm:ss')}">Este post ha sido editado</span>
+									    <!--<span th:unless="${post.fecha != null}">Este post ha sido editado</span>-->
+									    <span th:unless="${post.fecha == null}" th:text="${#temporals.format(post.fecha, 'yyyy-MM-dd HH:mm:ss')}">Este post ha sido editado</span>
 									</small>
+                                	</div> 
+									<div sec:authorize="isAuthenticated()" class="dropdown">
+								        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								            <i class="fas fa-ellipsis-h"></i> <!-- Ícono de tres puntos -->
+								        </button>
+								        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								            <!-- Botón de edición -->
+								            <a th:href="@{/hilo/editarPost(idPost=${post.id})}"
+								               th:if="${#authentication?.principal?.username == post.usuario?.username}"
+								               class="dropdown-item">Editar</a>
+								            
+								            <!-- Botón de edición para admins y moderadores -->
+								            <a th:href="@{/hilo/editarPost(idPost=${post.id})}"
+								               th:if="${#authorization.expression('hasAuthority(''ROLE_MOOD'') or hasAuthority(''ROLE_ADMIN'')')}"
+								               class="dropdown-item">Editar</a>
+								            
+								            <!-- Botón de borrado -->
+								            <form th:action="@{/borrarPost}" method="post"
+								                  th:if="${#authentication?.principal?.username == post.usuario?.username && post.usuario?.username != null}">
+								                <input type="hidden" name="idPost" th:value="${post.id}" />
+								                <button type="submit" class="dropdown-item">Borrar</button>
+								            </form>
+								            
+								            <!-- Botón de borrado (para admins y moderadores) -->
+								            <form th:action="@{/borrarPost}" method="post"
+								                  th:if="${#authorization.expression('hasAuthority(''ROLE_MOOD'') or hasAuthority(''ROLE_ADMIN'')')}">
+								                <input type="hidden" name="idPost" th:value="${post.id}" />
+								                <button type="submit" class="dropdown-item">Borrar</button>
+								            </form>
+								        </div>
+						   			 </div>
+									
+									
+                                </div>
                                 </p>
 								<h5 class="card-title" th:text="${post.usuario != null ? post.usuario.username : 'Usuario desconocido'}"></h5>
 
                                 <p class="card-text" th:text="${post.contenido}"></p>
-
-
-                                <!-- Botón de edición -->
-                                <a th:href="@{/hilo/editarPost(idPost=${post.id})}"
-                                   th:if="${#authentication?.principal?.username == post.usuario?.username && post.usuario?.username != null}"
-                                   class="btn btn-primary">Editar</a>
-                                   
-                                   <!-- Botón de edición para admins y moderadores -->
-                                <a th:href="@{/hilo/editarPost(idPost=${post.id})}"
-                                     th:if="${#authorization.expression('hasAuthority(''ROLE_MOOD'') or hasAuthority(''ROLE_ADMIN'')')}"
-                                   class="btn btn-primary">Editar</a>
-
-                                <!-- Botón de borrado -->
-                                <form th:action="@{/borrarPost}" method="post"
-                                      th:if="${#authentication?.principal?.username == post.usuario?.username && post.usuario?.username != null}">
-                                    <input type="hidden" name="idPost" th:value="${post.id}" />
-                                    <button type="submit" class="btn btn-danger">Borrar</button>
-                                </form>
-
-                                <!-- Botón de borrado (para admins y moderadores) -->
-                                <form th:action="@{/borrarPost}" method="post"
-                                     th:if="${#authorization.expression('hasAuthority(''ROLE_MOOD'') or hasAuthority(''ROLE_ADMIN'')')}">
-                                    <input type="hidden" name="idPost" th:value="${post.id}" />
-                                    <button type="submit" class="btn btn-danger">Borrar</button>
-                                </form>
-
+							
                             </div>
                         </div>
                     </div>
@@ -89,10 +106,7 @@
 
    
     <br>
-    <div sec:authorize="!isAuthenticated()" class="m-auto text-center">
-    <!-- Mensaje para usuarios no autenticados -->
-    <p>Si quieres participar en el foro, regístrate.</p>
-</div>
+    
 
     <!-- Si no hay usuario registrado, mostrar mensaje de inicio de sesión -->
     <div th:unless="${#authentication.isAuthenticated()}">
@@ -104,5 +118,23 @@
     <button onclick="history.back()" class="btn btn-secondary">Volver</button>
 
 </div>
+
+<script>
+    function openEditModal(hiloId) {
+    // Genera el ID del modal basado en categoryId
+    var modalId = 'editPostModal' + hiloId;
+
+    // Abre el modal de edición con el ID generado
+    $('#' + modalId).modal('show');
+}
+    
+   function openCreateModal() {
+    // Abre el modal de creación de categoría
+    $('#createPostModal').modal('show');
+}
+
+
+</script>
+
 </body>
 </html>
