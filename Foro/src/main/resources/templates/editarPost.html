@@ -11,8 +11,9 @@
         <h2>Editar Post</h2>
 
 		<form th:action="@{/hilo/guardarPost/{id}(id=${post.id})}" th:object="${post}" method="post">
-    <input type="hidden" name="idHilo" th:value="${post.hilo.id}" />
-    <input type="hidden" id="usuarioId" name="usuario.id" th:value="${#authentication?.principal?.id}" />
+		    <input type="hidden" name="idHilo" th:value="${post.hilo.id}" />
+		    <input type="hidden" id="usuarioId" name="usuario.id" th:value="${#authentication?.principal?.id}" />
+
 
     <div class="form-group">
         <label for="contenido">Contenido:</label>

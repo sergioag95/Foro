@@ -1,5 +1,6 @@
 package principal.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
@@ -118,6 +119,7 @@ public class PostController {
                 .orElseThrow(() -> new IllegalArgumentException("Hilo no encontrado con ID: " + idHilo));
         post.setId(id); // Establecer el ID del post existente
         post.setHilo(hilo);
+        post.setFecha(LocalDateTime.now());
         postService.guardarPost(post);
         return "redirect:/hilos/" + idHilo + "/verPosts";
     }

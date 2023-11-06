@@ -20,8 +20,8 @@
         <div class="col-md-8 offset-md-2">
             <div class="card">
                 <div class="card-header">Posts del Hilo: <span th:text="${hilo.titulo}"></span></div>
-                <div class="card-body custom-dark-background">
-                <form action="#" th:if="${#authentication.isAuthenticated()}"
+                <div class="card-body">
+                <form action="#" sec:authorize="isAuthenticated()"
 		              th:action="@{/hilo/crearPost(idHilo=${hilo.id})}" th:object="${nuevoPost}" method="post">
 		            <div class="form-group">
 		                <label for="contenido"></label>
@@ -42,7 +42,7 @@
 
                     <div th:each="post : ${listaPosts}" class="mb-3">
                         <div class="card">
-                            <div class="card-body">
+                            <div class="card-body" style="background-color: #F7F7F7;">
                             
                             
                                 <p class="card-title">
@@ -55,36 +55,29 @@
 									    <span th:unless="${post.fecha == null}" th:text="${#temporals.format(post.fecha, 'yyyy-MM-dd HH:mm:ss')}">Este post ha sido editado</span>
 									</small>
                                 	</div> 
-									<div sec:authorize="isAuthenticated()" class="dropdown">
+                                	<div sec:authorize="isAuthenticated()">
+									<div th:if="${#authentication?.principal?.username == post.usuario?.username && post.usuario?.username != null || #authorization.expression('hasAuthority(''ROLE_ADMIN'')')}" class="dropdown">
 								        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								            <i class="fas fa-ellipsis-h"></i> <!-- Ícono de tres puntos -->
 								        </button>
 								        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 								            <!-- Botón de edición -->
 								            <a th:href="@{/hilo/editarPost(idPost=${post.id})}"
-								               th:if="${#authentication?.principal?.username == post.usuario?.username}"
+								               th:if="${#authentication?.principal?.username == post.usuario?.username && post.usuario?.username != null || #authorization.expression('hasAuthority(''ROLE_ADMIN'')')}"
 								               class="dropdown-item">Editar</a>
 								            
-								            <!-- Botón de edición para admins y moderadores -->
-								            <a th:href="@{/hilo/editarPost(idPost=${post.id})}"
-								               th:if="${#authorization.expression('hasAuthority(''ROLE_MOOD'') or hasAuthority(''ROLE_ADMIN'')')}"
-								               class="dropdown-item">Editar</a>
-								            
+								          
 								            <!-- Botón de borrado -->
 								            <form th:action="@{/borrarPost}" method="post"
-								                  th:if="${#authentication?.principal?.username == post.usuario?.username && post.usuario?.username != null}">
+								                  th:if="${#authentication?.principal?.username == post.usuario?.username && post.usuario?.username != null || #authorization.expression('hasAuthority(''ROLE_ADMIN'')')}">
 								                <input type="hidden" name="idPost" th:value="${post.id}" />
 								                <button type="submit" class="dropdown-item">Borrar</button>
 								            </form>
 								            
-								            <!-- Botón de borrado (para admins y moderadores) -->
-								            <form th:action="@{/borrarPost}" method="post"
-								                  th:if="${#authorization.expression('hasAuthority(''ROLE_MOOD'') or hasAuthority(''ROLE_ADMIN'')')}">
-								                <input type="hidden" name="idPost" th:value="${post.id}" />
-								                <button type="submit" class="dropdown-item">Borrar</button>
-								            </form>
+								           
 								        </div>
 						   			 </div>
+                                	</div>
 									
 									
                                 </div>
