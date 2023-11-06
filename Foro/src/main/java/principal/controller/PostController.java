@@ -127,6 +127,16 @@ public class PostController {
     @PostMapping("/borrarPost")
     public String borrarPost(@RequestParam("idPost") Long idPost, Model model) {
         Post post = postService.obtenerPostPorId(idPost);
+        
+        // Obtén el usuario autenticado
+        org.springframework.security.core.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        // Asigna el usuario al post
+        Usuario usuario = usuarioRepo.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+        usuario.setNumeroPosts(usuario.getNumeroPosts()-1);
+        
 
         if (post == null) {
             return "redirect:/hilo/lista";
