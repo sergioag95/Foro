@@ -42,12 +42,13 @@
 						
 						<!-- Agregar botón para eliminar el hilo si el usuario actual es el creador, o si es moderador/admin -->
 						<button th:if="${#authentication?.principal?.username == hilo.usuario?.username && hilo.usuario?.username != null || #authorization.expression('hasAuthority(''ROLE_ADMIN'')')}"
-						        class="btn btn-danger" data-toggle="modal" data-target="#confirmarEliminacionModal">Eliminar</button>
+       					 class="btn btn-danger" th:data-target="'#confirmarEliminacionModal' + ${hilo.id}" data-toggle="modal">Eliminar</button>
+
 						
 
 
                         <!-- Modal de confirmación de eliminación -->
-					    <div class="modal fade" id="confirmarEliminacionModal" tabindex="-1" role="dialog" aria-labelledby="confirmarEliminacionModalLabel" aria-hidden="true">
+					<div class="modal fade" th:id="'confirmarEliminacionModal' + ${hilo.id}" tabindex="-1" role="dialog" aria-labelledby="'confirmarEliminacionModalLabel' + ${hilo.id}" aria-hidden="true">
 					        <div class="modal-dialog" role="document">
 					            <div class="modal-content">
 					                <div class="modal-header">

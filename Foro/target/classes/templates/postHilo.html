@@ -69,7 +69,7 @@
 								          
 								            <!-- Botón de borrado -->
 								            <button th:if="${#authentication?.principal?.username == post.usuario?.username && post.usuario?.username != null || #authorization.expression('hasAuthority(''ROLE_ADMIN'')')}"
-						       				 class="dropdown-item" data-toggle="modal" data-target="#confirmarEliminacionModal">Eliminar</button></form>
+						       				 class="dropdown-item" data-toggle="modal" th:data-target="'#confirmarEliminacionModal' + ${post.id}">Eliminar</button></form>
 																				            
 								           
 								        </div>
@@ -88,7 +88,7 @@
                         
                         
                            <!-- Modal de confirmación de eliminación -->
-					    <div class="modal fade" id="confirmarEliminacionModal" tabindex="-1" role="dialog" aria-labelledby="confirmarEliminacionModalLabel" aria-hidden="true">
+					<div class="modal fade" th:id="'confirmarEliminacionModal' + ${post.id}" tabindex="-1" role="dialog" aria-labelledby="'confirmarEliminacionModalLabel' + ${post.id}" aria-hidden="true">
 					        <div class="modal-dialog" role="document">
 					            <div class="modal-content">
 					                <div class="modal-header">
@@ -101,11 +101,11 @@
 					                    <p>¿Estás seguro de que deseas eliminar el post?</p>
 					                </div>
 					                <div class="modal-footer">
-				                     <form th:action="@{/borrarPost}" method="post" sec:authorize="isAuthenticated()"
-						                th:if="${#authentication?.principal?.username == post.usuario?.username && post.usuario?.username != null || #authorization.expression('hasAuthority(''ROLE_ADMIN'')')}">
+				                     <form th:action="@{/borrarPost}" method="post">
 						                <input type="hidden" name="idPost" th:value="${post.id}" />
-										<button th:if="${#authentication?.principal?.username == post.usuario?.username && post.usuario?.username != null || #authorization.expression('hasAuthority(''ROLE_ADMIN'')')}"
-										class="btn btn-danger" data-toggle="modal" data-target="#confirmarEliminacionModal">Eliminar</button>								            </form>
+										<button
+										class="btn btn-danger" data-toggle="modal" data-target="#confirmarEliminacionModal">Eliminar</button>
+									</form>
 					                </div>
 					            </div>
 					        </div>
