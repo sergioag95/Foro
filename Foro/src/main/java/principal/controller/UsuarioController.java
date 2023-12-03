@@ -1,8 +1,8 @@
 package principal.controller;
 
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,6 +24,7 @@ import principal.modelo.Rol;
 import principal.modelo.Usuario;
 import principal.modelo.dto.UsuarioDTO;
 import principal.repositorio.RolRepository;
+import principal.servicio.RolServiceImpl;
 import principal.servicio.UsuarioServiceImpl;
 
 @RequestMapping("/usuarios")
@@ -33,6 +34,9 @@ public class UsuarioController {
 
     @Autowired
     UsuarioServiceImpl userDetailsService;
+    
+    @Autowired
+    RolServiceImpl rolDetailsService;
     
     @Autowired
     private RolRepository rolRepository;
@@ -62,18 +66,15 @@ public class UsuarioController {
         usuarioaeditar.setUsername(usuarioEditado.getUsername());
         usuarioaeditar.setEmail(usuarioEditado.getEmail());
 
-        // Asignar roles según la selección en el formulario
-//        String rolSeleccionado = rol;
+      
+        usuarioaeditar.getRoles().clear();
         
-
-        	usuarioaeditar.getRoles().clear();
+        Rol rolExistente = rolRepository.findByNombre(rol);
         
-    	   Rol Rol = new Rol(rol);
-
-           usuarioaeditar.getRoles().add(Rol);
-           
-       
-
+        if (rolExistente != null) {
+            usuarioaeditar.getRoles().add(rolExistente);
+        }
+        
         userDetailsService.insertarUsuario(usuarioaeditar);    
         
         

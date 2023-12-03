@@ -2,6 +2,8 @@ package principal.servicio;
 
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,6 +26,9 @@ public class RolServiceImpl implements RolService {
 		return rolRepo.findByNombre(nombre);
 	}
 
+	 public List<Rol> obtenerTodosLosRoles() {
+	        return rolRepo.findAll();
+	    }
 
 
 	@Override
