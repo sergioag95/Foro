@@ -34,9 +34,8 @@
                 <span th:if="${usuario.roles.contains('ROLE_MOOD')}">Moderador</span>
                 <span th:if="${usuario.roles.contains('ROLE_USER')}">Usuario</span>
             </td>
-            <td>
-              	<a th:href="@{/usuarios/delete/__${usuario.id}__}" class="btn btn-danger"
-                   th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}">Eliminar</a>
+            <td th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}">
+              	<a th:href="@{/usuarios/delete/__${usuario.id}__}" class="btn btn-danger" th:unless="${usuario.roles.contains('ROLE_ADMIN')}">Eliminar</a>
 
             </td>
         </tr>

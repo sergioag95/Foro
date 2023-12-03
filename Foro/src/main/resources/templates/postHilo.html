@@ -155,7 +155,7 @@
 
     <br>
     <!-- Botón de volver -->
-    <button onclick="history.back()" class="btn btn-secondary">Volver</button>
+	<button type="button" onclick="goBack()" class="btn btn-secondary">Volver</button>
 
 </div>
 
@@ -172,6 +172,10 @@
     // Abre el modal de creación de categoría
     $('#createPostModal').modal('show');
 }
+
+function goBack() {
+        window.history.back();
+    }
 
 
 </script>
