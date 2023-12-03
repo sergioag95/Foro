@@ -2,6 +2,7 @@ package principal.controller;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,11 +18,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import principal.modelo.Rol;
 import principal.modelo.Usuario;
 import principal.modelo.dto.UsuarioDTO;
+import principal.repositorio.RolRepository;
 import principal.servicio.UsuarioServiceImpl;
 
 @RequestMapping("/usuarios")
@@ -31,6 +33,9 @@ public class UsuarioController {
 
     @Autowired
     UsuarioServiceImpl userDetailsService;
+    
+    @Autowired
+    private RolRepository rolRepository;
 
     @GetMapping(value = { "", "/" })
     String homeusuarios(Model model) {
@@ -49,7 +54,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/edit/{id}")
-    public String editarUsuario(@PathVariable Long id, @ModelAttribute("usuarioaEditar") UsuarioDTO usuarioEditado, BindingResult bindingresult) {
+    public String editarUsuario(@PathVariable Long id, @RequestParam("rol") String rol, @ModelAttribute("usuarioaEditar") UsuarioDTO usuarioEditado, BindingResult bindingresult) {
 
         Usuario usuarioaeditar = userDetailsService.obtenerUsuarioPorID(id);
 
@@ -57,8 +62,24 @@ public class UsuarioController {
         usuarioaeditar.setUsername(usuarioEditado.getUsername());
         usuarioaeditar.setEmail(usuarioEditado.getEmail());
 
+        // Asignar roles según la selección en el formulario
+//        String rolSeleccionado = rol;
+        
+
+        	usuarioaeditar.getRoles().clear();
+        
+    	   Rol Rol = new Rol(rol);
+
+           usuarioaeditar.getRoles().add(Rol);
+           
+       
+
+        userDetailsService.insertarUsuario(usuarioaeditar);    
+        
+        
         // Encriptar la contraseña solo si se ha proporcionado una nueva contraseña
-        if (!usuarioEditado.getPassword().isEmpty()) {
+        if (usuarioEditado.getPassword() != null && !usuarioEditado.getPassword().isEmpty()) {
+            // Encriptar la contraseña solo si se ha proporcionado una nueva contraseña
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(usuarioEditado.getPassword());
             usuarioaeditar.setPassword(encodedPassword);
@@ -68,6 +89,9 @@ public class UsuarioController {
 
         return "redirect:/usuarios";
     }
+    
+
+
 
     @PostMapping("/add")
     public String addUsuario(@ModelAttribute("usuarioNuevo") Usuario usuarioNew, BindingResult bindingresult) {

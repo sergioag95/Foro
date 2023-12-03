@@ -35,11 +35,58 @@
                 <span th:if="${usuario.roles.contains('ROLE_USER')}">Usuario</span>
             </td>
             <td th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}">
+     
+			    <button type="button" class="btn btn-primary" data-toggle="modal" th:data-target="'#editModal' + ${usuario.id}">Editar</button>
+
               	<a th:href="@{/usuarios/delete/__${usuario.id}__}" class="btn btn-danger" th:unless="${usuario.roles.contains('ROLE_ADMIN')}">Eliminar</a>
 
             </td>
         </tr>
     </table>
+    
+    
+    <!-- Agrega el modal para la edición de usuarios -->
+		<div th:each="usuario : ${listaUsuarios}">
+		    <div class="modal fade" th:id="'editModal' + ${usuario.id}" tabindex="-1" role="dialog" aria-labelledby="'editModalLabel' + ${usuario.id}" aria-hidden="true">
+		        <div class="modal-dialog" role="document">
+		            <div class="modal-content">
+		                <!-- Contenido del formulario de edición -->
+		                <form th:action="@{/usuarios/edit/{id}(id=${usuario.id})}" method="post">
+		                    <div class="modal-header">
+		                        <h5 class="modal-title" th:id="'editModalLabel' + ${usuario.id}">Editar Usuario</h5>
+		                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		                            <span aria-hidden="true">&times;</span>
+		                        </button>
+		                    </div>
+		                    <div class="modal-body">
+		                        <!-- Campos del formulario de edición -->
+		                        <input type="hidden" th:name="id" th:value="${usuario.id}" />
+		                        <input type="hidden" th:name="nombre" th:value="${usuario.nombre}" />
+
+		                        <label for="username">Username:</label>
+		                        <input type="text" th:name="username" th:value="${usuario.username}" class="form-control" required />
+		                        
+		                        <label for="email">Correo:</label>
+		                        <input type="text" th:name="email" th:value="${usuario.email}" class="form-control" required />
+		                        
+		                        <label for="rol" th:unless="${usuario.roles.contains('ROLE_ADMIN')}">Rol:</label>
+		                        <select th:name="rol" class="form-control" th:unless="${usuario.roles.contains('ROLE_ADMIN')}">
+					                <option th:value="${'ROLE_MOOD'}" th:selected="${usuario.roles.contains('ROLE_MOOD')}">Moderador</option>
+					                <option th:value="${'ROLE_USER'}" th:selected="${usuario.roles.contains('ROLE_USER')}">Usuario</option>
+					            </select>
+		                        
+		                        <!-- Agrega otros campos según sea necesario, como roles -->
+		                    </div>
+		                    <div class="modal-footer">
+		                        <button type="submit" class="btn btn-primary">Guardar</button>
+		                    </div>
+		                </form>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+
+    
 </div>
 </body>
 </html>
