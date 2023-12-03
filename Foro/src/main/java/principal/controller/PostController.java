@@ -54,6 +54,9 @@ public class PostController {
         model.addAttribute("hilo", hilo);
         model.addAttribute("listaPosts", posts);
         model.addAttribute("nuevoPost", new Post()); // Agrega esto para el formulario de crear post
+        model.addAttribute("categoriaId", hilo.getCategoria().getId()); // Agrega el id de la categoría al modelo
+
+        
         return "postHilo";
     }
 
@@ -109,21 +112,10 @@ public class PostController {
             return "redirect:/hilo/lista";
         }
         model.addAttribute("post", post);
-        return "editarPost";
+        return "postHilo";
     }
     
-    @PostMapping("/hilo/guardarPost/{id}")
-    public String guardarPostEditado(@PathVariable("id") Long id, @ModelAttribute("post") Post post,
-                                     @RequestParam("idHilo") Long idHilo) {
-        Hilo hilo = hiloRepository.findById(idHilo)
-                .orElseThrow(() -> new IllegalArgumentException("Hilo no encontrado con ID: " + idHilo));
-        post.setId(id); // Establecer el ID del post existente
-        post.setHilo(hilo);
-        post.setFecha(LocalDateTime.now());
-        postService.guardarPost(post);
-        return "redirect:/hilos/" + idHilo + "/verPosts";
-    }
-
+    
     @PostMapping("/borrarPost")
     public String borrarPost(@RequestParam("idPost") Long idPost, Model model) {
         Post post = postService.obtenerPostPorId(idPost);
@@ -147,6 +139,28 @@ public class PostController {
 
         return "redirect:/hilos/" + hilo.getId() + "/verPosts";
     }
+    
+    @PostMapping("/hilo/guardarPostEditado/{id}")
+    public String guardarPostEditado(@PathVariable("id") Long id, @ModelAttribute("post") Post post,
+                                     @RequestParam("idHilo") Long idHilo) {
+        Hilo hilo = hiloRepository.findById(idHilo)
+                .orElseThrow(() -> new IllegalArgumentException("Hilo no encontrado con ID: " + idHilo));
+        
+        org.springframework.security.core.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        
+        // Asigna el usuario al post
+        Usuario usuario = usuarioRepo.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+        post.setUsuario(usuario);
+        
+        post.setId(id); // Establecer el ID del post existente
+        post.setHilo(hilo);
+        post.setFecha(LocalDateTime.now());
+        postService.guardarPost(post);
+        return "redirect:/hilos/" + idHilo + "/verPosts";
+    }
+
 
 
 

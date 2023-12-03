@@ -62,9 +62,9 @@
 								        </button>
 								        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 								            <!-- Botón de edición -->
-								            <a th:href="@{/hilo/editarPost(idPost=${post.id})}"
-								               th:if="${#authentication?.principal?.username == post.usuario?.username && post.usuario?.username != null || #authorization.expression('hasAuthority(''ROLE_ADMIN'')')}" th:onclick="'openEditModal(' + ${post.id} + ');'"
-								               class="dropdown-item">Editar</a>
+								            <a th:if="${#authentication?.principal?.username == post.usuario?.username && post.usuario?.username != null || #authorization.expression('hasAuthority(''ROLE_ADMIN'')')}"
+										    th:onclick="'openEditModal(' + ${post.id} + ');'" class="dropdown-item">Editar</a>
+
 								            
 								          
 								            <!-- Botón de borrado -->
@@ -93,9 +93,7 @@
 					            <div class="modal-content">
 					                <div class="modal-header">
 					                    <h5 class="modal-title" id="confirmarEliminacionModalLabel">Confirmar eliminación</h5>
-					                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					                        <span aria-hidden="true">&times;</span>
-					                    </button>
+					                   
 					                </div>
 					                <div class="modal-body">
 					                    <p>¿Estás seguro de que deseas eliminar el post?</p>
@@ -103,14 +101,38 @@
 					                <div class="modal-footer">
 				                     <form th:action="@{/borrarPost}" method="post">
 						                <input type="hidden" name="idPost" th:value="${post.id}" />
-										<button
-										class="btn btn-danger" data-toggle="modal" data-target="#confirmarEliminacionModal">Eliminar</button>
+										<button class="btn btn-danger" data-toggle="modal" data-target="#confirmarEliminacionModal">Eliminar</button>
 									</form>
 					                </div>
 					            </div>
 					        </div>
 					    </div>
                         
+                        <div class="modal fade" th:id="'editModal' + ${post.id}" tabindex="-1" role="dialog" aria-labelledby="editModal' + ${post.id}" aria-hidden="true">
+						    <div class="modal-dialog" role="document">
+						        <div class="modal-content">
+								<!-- Agrega el atributo th:action para apuntar al controlador de edición de posts -->
+									<form th:action="@{/hilo/guardarPostEditado/{id}(id=${post.id}, idHilo=${hilo.id})}" method="post">
+									    <!-- Contenido del formulario -->
+									    <div class="modal-header">
+									        <h5 class="modal-title" id="editHiloModalLabel">Editar Post</h5>
+									    </div>
+									    <div class="modal-body">
+									        <div class="form-group">
+									            <label for="contenidoEdit">Contenido del post:</label>
+									            <textarea id="contenidoEdit" th:name="contenido" class="form-control" required th:placeholder="${post.contenido}" th:value="${post.contenido}"></textarea>
+									            <input type="hidden" th:name="id" th:value="${post.id}"/>
+									        </div>
+									    </div>
+									    <div class="modal-footer">
+									        <button type="submit" class="btn btn-primary">Guardar</button>
+									    </div>
+									</form>
+
+										
+						        </div>
+						    </div>
+						</div>
                         
                         
                     </div>
@@ -140,12 +162,10 @@
 
 
 <script>
-    function openEditModal(hiloId) {
+    function openEditModal(postId) {
     // Genera el ID del modal basado en categoryId
-    var modalId = 'editPostModal' + hiloId;
-
-    // Abre el modal de edición con el ID generado
-    $('#' + modalId).modal('show');
+   var modalId = 'editModal' + postId;
+        $('#' + modalId).modal('show');
 }
     
    function openCreateModal() {

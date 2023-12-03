@@ -111,7 +111,9 @@ public class HiloController {
 
         model.addAttribute("hilo", hilo);
         model.addAttribute("listaPosts", postHilo);
+        model.addAttribute("categoriaId", hilo.getCategoria().getId()); // Agrega el id de la categoría al modelo
 
+        
         return "postHilo";
     }
     
