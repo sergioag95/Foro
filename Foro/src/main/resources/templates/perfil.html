@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="librerias::librerias">
+    <meta charset="UTF-8">
+    <title>Perfil</title>
+     
+</head>
+<body>
+<header>
+    <div th:insert="top::top"></div>
+  
+</header>
+<div class="container mt-4">
+    <h2>Perfil de Usuario</h2>
+    
+    <!-- Información del usuario -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${usuario.username}"></h5>
+            <p class="card-text">Nombre: <span th:text="${usuario.nombre}"></span></p>
+            <p class="card-text">Posts Escritos: <span th:text="${usuario.numeroPosts}"></span></p>
+            <p class="card-text">Correo: <span th:text="${usuario.email}"></span></p>
+            <!-- Agrega más campos según los datos de tu usuario -->
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+<script>
+   
+
+</script>
+
+
+
+
+</body>
+</html>
+
