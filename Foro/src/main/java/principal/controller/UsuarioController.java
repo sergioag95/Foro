@@ -181,22 +181,7 @@ public class UsuarioController {
     
    
 
-        @Autowired
-        private UsuarioServiceImpl usuarioService;  // Debes inyectar tu servicio de usuario
-
-        @GetMapping
-        public String mostrarPerfil(Model model, Principal principal) {
-            String nombreUsuario = principal.getName();  // Obtiene el nombre del usuario actualmente autenticado
-
-            Usuario usuario = usuarioService.obtenerUsuarioPorNombre(nombreUsuario);
-            if (usuario == null) {
-                throw new IllegalArgumentException("Usuario no encontrado con nombre: " + nombreUsuario);
-            }
-
-            model.addAttribute("usuario", usuario);
-
-            return "perfil";
-        }
+       
     }
 
     

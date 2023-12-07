@@ -11,9 +11,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import principal.modelo.Post;
 import principal.modelo.Rol;
 import principal.modelo.Usuario;
 import principal.modelo.dto.UsuarioDTO;
+import principal.repositorio.PostRepositorio;
 import principal.repositorio.RolRepo;
 import principal.repositorio.UsuarioRepo;
 
@@ -25,6 +27,9 @@ public class UsuarioServiceImpl implements UserDetailsService, UsuarioServicio {
 	
 	@Autowired
 	private RolRepo rolRepo;
+	
+	@Autowired
+	private  PostRepositorio postRepositorio;
 	
 	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -113,6 +118,10 @@ public class UsuarioServiceImpl implements UserDetailsService, UsuarioServicio {
     @Override
     public void actualizarUsuario(Usuario usuario) {
     	usuarioRepo.save(usuario);
+    }
+    
+    public List<Post> obtenerPostsPorUsuario(Usuario usuario) {
+        return postRepositorio.findByUsuario(usuario);
     }
 	
 

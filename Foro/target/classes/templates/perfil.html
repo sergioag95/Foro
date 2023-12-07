@@ -13,16 +13,98 @@
 <div class="container mt-4">
     <h2>Perfil de Usuario</h2>
     
-    <!-- Información del usuario -->
+    <!-- Información del usuario 
     <div class="card">
         <div class="card-body">
             <h5 class="card-title" th:text="${usuario.username}"></h5>
             <p class="card-text">Nombre: <span th:text="${usuario.nombre}"></span></p>
             <p class="card-text">Posts Escritos: <span th:text="${usuario.numeroPosts}"></span></p>
             <p class="card-text">Correo: <span th:text="${usuario.email}"></span></p>
-            <!-- Agrega más campos según los datos de tu usuario -->
+           
         </div>
+    </div>-->
+    
+    <section style="background-color: #eee;">
+  <div class="container py-5">
+    
+
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <img src="../public/images/Generic-profile-picture.jpg" alt="avatar"
+              class="rounded-circle img-fluid" style="width: 150px;">
+            <h5 class="my-3"><span th:text="${usuario.username}"></span></h5>
+           
+             <div sec:authorize="isAuthenticated()">
+
+			<div th:if="${#authentication?.principal?.username != usuario.username}">
+           
+            <div class="d-flex justify-content-center mb-2">
+              <button type="button" class="btn btn-primary">Follow</button>
+            </div>
+            
+           </div>
+             </div>
+            
+          </div>
+        </div>
+        
+      </div>
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Nombre</p>
+              </div>
+              <div class="col-sm-9">
+            	<p class="card-text"><span th:text="${usuario.nombre}"></span></p>
+              </div>
+            </div>
+            <hr>    
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Email</p>
+              </div>
+              <div class="col-sm-9">
+            	<p class="card-text"><span th:text="${usuario.email}"></span></p>
+              </div>
+            </div>    
+          </div>
+        </div>
+       
+      
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Posts Escritos</h5>
+                <p class="display-4 text-center mb-4"><span th:text="${usuario.numeroPosts}"></span></p>
+
+                <!-- Aquí puedes iterar sobre las publicaciones del usuario y mostrarlas -->
+                <div th:each="post : ${usuario.posts}">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                        <div>
+							Fecha: <small>
+							    <span th:if="${post.fecha == null}" th:unless="${post.fecha == null}" th:text="${#temporals.format(post.fecha, 'yyyy-MM-dd HH:mm:ss')}">Este post ha sido editado</span>
+							    <!--<span th:unless="${post.fecha != null}">Este post ha sido editado</span>-->
+							    <span th:unless="${post.fecha == null}" th:text="${#temporals.format(post.fecha, 'yyyy-MM-dd HH:mm:ss')}">Este post ha sido editado</span>
+							</small>
+                        	</div>
+                            <p class="card-text" th:text="${post.contenido}"></p>
+                            <!-- Agrega más detalles de la publicación según tu modelo de datos -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+   
+
+      </div>
+
     </div>
+  </div>
+</section>
 
 </div>
 

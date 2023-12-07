@@ -3,6 +3,7 @@ package principal.servicio;
 import java.util.List;
 
 import principal.modelo.dto.UsuarioDTO;
+import principal.modelo.Post;
 import principal.modelo.Rol;
 import principal.modelo.Usuario;
 
@@ -18,4 +19,6 @@ public interface UsuarioServicio  {
     public boolean existeUsername(String username);
     public boolean existeEmail(String email);
     public void actualizarUsuario(Usuario usuario);
+    public List<Post> obtenerPostsPorUsuario(Usuario usuario);
+    
 }
