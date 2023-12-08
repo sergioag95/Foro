@@ -135,6 +135,31 @@ public class UsuarioServiceImpl implements UserDetailsService, UsuarioServicio {
         // Guarda los cambios en la base de datos
         usuarioRepo.save(seguidor);
     }
+    
+    public void unfollowUsuario(String usernameSeguidor, Long userIdToFollow) {
+        Usuario seguidor = obtenerUsuarioPorNombre(usernameSeguidor);
+        Usuario usuarioToFollow = usuarioRepo.findById(userIdToFollow)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario a seguir no encontrado con ID: " + userIdToFollow));
+
+        // Asumiendo que tienes un método en tu entidad Usuario para gestionar la relación de seguir
+        seguidor.dejarDeSeguirUsuario(usuarioToFollow);;
+
+        // Guarda los cambios en la base de datos
+        usuarioRepo.save(seguidor);
+    }
+    
+    public boolean isUserFollowing(String usernameFollower, Long userIdToFollow) {
+        // Obtener el usuario que sigue
+        Usuario follower = usuarioRepo.findByUsername(usernameFollower)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con nombre de usuario: " + usernameFollower));
+
+        // Obtener el usuario a seguir
+        Usuario userToFollow = usuarioRepo.findById(userIdToFollow)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario a seguir no encontrado con ID: " + userIdToFollow));
+
+        // Verificar si el usuario que sigue está en la lista de seguidores del usuario a seguir
+        return userToFollow.getSeguidores().contains(follower);
+    }
 
 }
 
