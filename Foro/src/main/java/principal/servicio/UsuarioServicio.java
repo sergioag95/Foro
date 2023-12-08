@@ -20,5 +20,5 @@ public interface UsuarioServicio  {
     public boolean existeEmail(String email);
     public void actualizarUsuario(Usuario usuario);
     public List<Post> obtenerPostsPorUsuario(Usuario usuario);
-    
+    public void seguirUsuario(String usernameSeguidor, Long userIdToFollow);
 }

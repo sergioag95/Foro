@@ -69,6 +69,19 @@ public class Usuario implements UserDetails{
     @Column (name="rol")
 
 	private Set<Rol> roles;
+    
+    
+    
+    @ManyToMany
+    @JoinTable(
+        name = "usuarios_seguidos",
+        joinColumns = @JoinColumn(name = "seguidor_id"),
+        inverseJoinColumns = @JoinColumn(name = "seguido_id")
+    )
+    private Set<Usuario> seguidos = new HashSet<>();
+
+    @ManyToMany(mappedBy = "seguidos")
+    private Set<Usuario> seguidores = new HashSet<>();
 	
     public Usuario() {
         roles = new HashSet<>();
@@ -197,6 +210,24 @@ public class Usuario implements UserDetails{
 		// TODO Auto-generated method stub
 		return true;
 	}
+	
+	 public Set<Usuario> getSeguidos() {
+	        return seguidos;
+	    }
+
+    public Set<Usuario> getSeguidores() {
+        return seguidores;
+    }
+
+    public void seguirUsuario(Usuario usuario) {
+        seguidos.add(usuario);
+        usuario.seguidores.add(this);
+    }
+
+    public void dejarDeSeguirUsuario(Usuario usuario) {
+        seguidos.remove(usuario);
+        usuario.seguidores.remove(this);
+    }
 	
     // Constructor, getters y setters
     

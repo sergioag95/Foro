@@ -124,6 +124,17 @@ public class UsuarioServiceImpl implements UserDetailsService, UsuarioServicio {
         return postRepositorio.findByUsuario(usuario);
     }
 	
+    public void seguirUsuario(String usernameSeguidor, Long userIdToFollow) {
+        Usuario seguidor = obtenerUsuarioPorNombre(usernameSeguidor);
+        Usuario usuarioToFollow = usuarioRepo.findById(userIdToFollow)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario a seguir no encontrado con ID: " + userIdToFollow));
+
+        // Asumiendo que tienes un método en tu entidad Usuario para gestionar la relación de seguir
+        seguidor.seguirUsuario(usuarioToFollow);
+
+        // Guarda los cambios en la base de datos
+        usuarioRepo.save(seguidor);
+    }
 
 }
 
