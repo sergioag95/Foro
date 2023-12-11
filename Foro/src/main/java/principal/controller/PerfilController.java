@@ -30,6 +30,14 @@ public class PerfilController {
     @GetMapping("/{idUsuario}")
     public String mostrarPerfil(@PathVariable Long idUsuario, Model model, Principal principal) {
         Usuario usuario = usuarioService.obtenerUsuarioPorID(idUsuario);
+        
+        List<Usuario> seguidores = usuarioService.obtenerSeguidores(usuario.getId());
+        model.addAttribute("seguidores", seguidores);
+        
+        List<Usuario> seguidos = usuarioService.obtenerSeguidos(usuario.getId());
+        model.addAttribute("seguidos", seguidos);
+        
+        
         if (usuario == null) {
             throw new IllegalArgumentException("Usuario no encontrado con ID: " + idUsuario);
         }
@@ -67,4 +75,6 @@ public class PerfilController {
         // Redirige a la página del perfil o a donde desees después de seguir al usuario
         return "redirect:/perfil/" + userIdToUnfollow;
     }
+    
+  
 }

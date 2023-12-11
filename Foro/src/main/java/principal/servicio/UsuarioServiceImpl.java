@@ -1,6 +1,8 @@
 package principal.servicio;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -123,6 +125,8 @@ public class UsuarioServiceImpl implements UserDetailsService, UsuarioServicio {
     public List<Post> obtenerPostsPorUsuario(Usuario usuario) {
         return postRepositorio.findByUsuario(usuario);
     }
+    
+    
 	
     public void seguirUsuario(String usernameSeguidor, Long userIdToFollow) {
         Usuario seguidor = obtenerUsuarioPorNombre(usernameSeguidor);
@@ -160,6 +164,31 @@ public class UsuarioServiceImpl implements UserDetailsService, UsuarioServicio {
         // Verificar si el usuario que sigue está en la lista de seguidores del usuario a seguir
         return userToFollow.getSeguidores().contains(follower);
     }
+    
+    public List<Usuario> obtenerSeguidores(Long idUsuario) {
+        Optional<Usuario> usuarioOptional = usuarioRepo.findById(idUsuario);
+
+        if (usuarioOptional.isPresent()) {
+            Usuario usuario = usuarioOptional.get();
+            return new ArrayList<>(usuario.getSeguidores());
+        } else {
+            // Manejar el caso en el que el usuario no existe
+            return Collections.emptyList();
+        }
+    }
+    
+    public List<Usuario> obtenerSeguidos(Long idUsuario) {
+        Optional<Usuario> usuarioOptional = usuarioRepo.findById(idUsuario);
+
+        if (usuarioOptional.isPresent()) {
+            Usuario usuario = usuarioOptional.get();
+            return new ArrayList<>(usuario.getSeguidos());
+        } else {
+            // Manejar el caso en el que el usuario no existe
+            return Collections.emptyList();
+        }
+    }
+  
 
 }
 

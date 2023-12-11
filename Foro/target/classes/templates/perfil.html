@@ -20,6 +20,23 @@
                             <img src="../public/images/Generic-profile-picture.jpg" alt="avatar"
                                  class="rounded-circle img-fluid" style="width: 150px;">
                             <h5 class="my-3"><span th:text="${usuario.nombre}"></span></h5>
+                             
+                             <div class="d-flex" style="justify-content: space-evenly;"> 
+                                <!-- Sección de seguidores -->
+						    <div class="followers-section d-flex" data-toggle="modal" data-target="#followersModal" style="cursor: pointer;">
+						        <i class="fas fa-users icon">&nbsp;</i>
+						        <span  th:text="${#sets.size(usuario.seguidores)}" id="followersCount" class="count">&nbsp;</span>
+						        <p>&nbsp;Seguidores</p>
+						    </div>
+						
+						    <!-- Sección de seguidos -->
+						    <div class="following-section d-flex" data-toggle="modal" data-target="#followingModal" style="cursor: pointer;">
+						        <i class="fas fa-user-friends icon">&nbsp;</i>
+						        <span  th:text="${#sets.size(usuario.seguidos)}" id="followersCount" class="count">&nbsp;</span>
+						        <p>&nbsp;Seguidos</p>
+						    </div>
+                             </div>
+                             
                             <div sec:authorize="isAuthenticated()">
                                 <div th:if="${#authentication.principal.username != usuario.username}">
                                     <div th:if="${isSiguiendo}">
@@ -79,38 +96,39 @@
                             </div>
                         </div>
                     </div>
-  <div class="card mb-4">
-            <div class="card-body">
-                <h5 class="card-title">Posts Escritos</h5>
-                <p class="display-4 text-center mb-4"><span th:text="${usuario.numeroPosts}"></span></p>
-
-                <!-- Aquí puedes iterar sobre las publicaciones del usuario y mostrarlas -->
-                <div th:each="post : ${usuario.posts}">
-                    <div class="card mb-3">
-                        <div class="card-body">
-                        <div>
-							Fecha: <small>
-							    <span th:if="${post.fecha == null}" th:unless="${post.fecha == null}" th:text="${#temporals.format(post.fecha, 'yyyy-MM-dd HH:mm:ss')}">Este post ha sido editado</span>
-							    <!--<span th:unless="${post.fecha != null}">Este post ha sido editado</span>-->
-							    <span th:unless="${post.fecha == null}" th:text="${#temporals.format(post.fecha, 'yyyy-MM-dd HH:mm:ss')}">Este post ha sido editado</span>
-							</small>
-                        	</div>
-                            <p class="card-text" th:text="${post.contenido}"></p>
-                            <!-- Agrega más detalles de la publicación según tu modelo de datos -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+					  <div class="card mb-4">
+					            <div class="card-body">
+					                <h5 class="card-title">Posts Escritos</h5>
+					                <p class="display-4 text-center mb-4"><span th:text="${usuario.numeroPosts}"></span></p>
+					
+					                <!-- Aquí puedes iterar sobre las publicaciones del usuario y mostrarlas -->
+					                <div th:each="post : ${usuario.posts}">
+					                    <div class="card mb-3">
+					                        <div class="card-body">
+					                        <div>
+												Fecha: <small>
+												    <span th:if="${post.fecha == null}" th:unless="${post.fecha == null}" th:text="${#temporals.format(post.fecha, 'yyyy-MM-dd HH:mm:ss')}">Este post ha sido editado</span>
+												    <!--<span th:unless="${post.fecha != null}">Este post ha sido editado</span>-->
+												    <span th:unless="${post.fecha == null}" th:text="${#temporals.format(post.fecha, 'yyyy-MM-dd HH:mm:ss')}">Este post ha sido editado</span>
+												</small>
+					                        	</div>
+					                            <p class="card-text" th:text="${post.contenido}"></p>
+					                            <!-- Agrega más detalles de la publicación según tu modelo de datos -->
+					                        </div>
+					                    </div>
+					                </div>
+					            </div>
+					        </div>
    
-
-      </div>
-
-    </div>
-  </div>
-</section>
-
-</div>                </div>
+				
+				      </div>
+				
+				    </div>
+				  </div>
+				</section>
+				
+				</div>               
+			</div>
             </div>
         </div>
     </section>
@@ -177,6 +195,60 @@
     </div>
 </div>
 
+</div>
+
+
+
+
+<!-- Modal de Seguidores -->
+<div class="modal fade" id="followersModal" tabindex="-1" role="dialog" aria-labelledby="followersModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="followersModalLabel">Seguidores</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-columns">
+                    <div th:each="seguidor : ${seguidores}" class="card mb-3">
+   						 <a th:href="@{'/perfil/' + ${seguidor.id}}" style="text-decoration: none;">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-user-circle"></i> <span th:text="${seguidor.nombre}"></span></h5>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Seguidos -->
+<div class="modal fade" id="followingModal" tabindex="-1" role="dialog" aria-labelledby="followingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="followingModalLabel">Seguidos</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-columns">
+                    <div th:each="seguido : ${seguidos}" class="card mb-3">
+                       <a th:href="@{'/perfil/' + ${seguido.id}}" style="text-decoration: none;">
+
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-user-circle"></i> <span th:text="${seguido.nombre}"></span></h5>
+                        </div>
+                       </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 

@@ -23,4 +23,7 @@ public interface UsuarioServicio  {
     public void seguirUsuario(String usernameSeguidor, Long userIdToFollow);
     public boolean isUserFollowing(String usernameFollower, Long userIdToFollow);
     public void unfollowUsuario(String usernameSeguidor, Long userIdToFollow);
+    public List<Usuario> obtenerSeguidores(Long idUsuario);
+    public List<Usuario> obtenerSeguidos(Long idUsuario);
+
 }
