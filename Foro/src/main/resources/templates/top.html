@@ -100,33 +100,13 @@
 						<!-- Dropdown - User Information -->
 						<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
 							aria-labelledby="userDropdown">
-							<a class="dropdown-item" href="/seguridad/password">
-								<i class="fas fa-lock fa-sm fa-fw mr-3 text-gray-600"></i>
-								Contraseña
-							</a>
+							
 
 							<a class="dropdown-item" th:href="@{/perfil/{idUsuario}(idUsuario=${#authentication.principal.id})}">
 							    <i class="fas fa-address-card fa-sm fa-fw mr-3 text-gray-600"></i>
 							    Tu Perfil
 							</a>
 
-
-							
-							<div class="dropdown-divider"></div>
-							<div sec:authorize="hasAuthority('ROLE_USER')">
-								<a class="dropdown-item" href="/seguridad/panel">
-									<i class="fas fa-cog fa-sm fa-fw mr-3 text-gray-600"></i>
-									Configuración User
-								</a>
-								<div class="dropdown-divider"></div>
-							</div>
-							<div sec:authorize="hasAuthority('ROLE_ADMIN')">
-								<a class="dropdown-item" href="/seguridad/panel">
-									<i class="fas fa-cog fa-sm fa-fw mr-3 text-gray-600"></i>
-									Configuración Admin
-								</a>
-								<div class="dropdown-divider"></div>
-							</div>
 							<a   class="dropdown-item" th:href="@{/logout}">
 								<i class="fas fa-sign-out-alt fa-sm fa-fw mr-3 text-gray-600"></i>
 								<span >Cerrar Sesión</span>

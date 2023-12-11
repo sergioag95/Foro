@@ -4,6 +4,8 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,13 +34,19 @@ public class PerfilController {
             throw new IllegalArgumentException("Usuario no encontrado con ID: " + idUsuario);
         }
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        
+      
+
         boolean isSiguiendo = usuarioService.isUserFollowing(principal.getName(), usuario.getId());
+        model.addAttribute("isSiguiendo", isSiguiendo);
+        
 
         // Agrega los posts del usuario al modelo
         List<Post> postsUsuario = usuarioService.obtenerPostsPorUsuario(usuario);
         model.addAttribute("usuario", usuario);
         model.addAttribute("postsUsuario", postsUsuario);
-        model.addAttribute("isSiguiendo", isSiguiendo);
 
         return "perfil";
     }

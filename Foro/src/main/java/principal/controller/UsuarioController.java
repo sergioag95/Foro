@@ -91,6 +91,33 @@ public class UsuarioController {
         return "redirect:/usuarios";
     }
     
+    
+    @PostMapping("/editPerfil/{id}")
+    public String editarPerfilUsuario(@PathVariable Long id, @ModelAttribute("usuarioaEditar") UsuarioDTO usuarioEditado, BindingResult bindingresult) {
+
+        Usuario usuarioaeditar = userDetailsService.obtenerUsuarioPorID(id);
+
+        usuarioaeditar.setNombre(usuarioEditado.getNombre());
+        usuarioaeditar.setUsername(usuarioEditado.getUsername());
+        usuarioaeditar.setEmail(usuarioEditado.getEmail());
+
+
+        userDetailsService.insertarUsuario(usuarioaeditar);    
+        
+        
+        // Encriptar la contraseña solo si se ha proporcionado una nueva contraseña
+        if (usuarioEditado.getPassword() != null && !usuarioEditado.getPassword().isEmpty()) {
+            // Encriptar la contraseña solo si se ha proporcionado una nueva contraseña
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String encodedPassword = passwordEncoder.encode(usuarioEditado.getPassword());
+            usuarioaeditar.setPassword(encodedPassword);
+        }
+
+        userDetailsService.insertarUsuario(usuarioaeditar);
+
+        return "redirect:/perfil/"+usuarioEditado.getId();
+    }
+    
 
 
 

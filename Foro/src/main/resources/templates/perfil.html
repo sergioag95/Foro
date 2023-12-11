@@ -3,97 +3,83 @@
 <head th:insert="librerias::librerias">
     <meta charset="UTF-8">
     <title>Perfil</title>
-     
 </head>
 <body>
 <header>
     <div th:insert="top::top"></div>
-  
 </header>
 <div class="container mt-4">
     <h2>Perfil de Usuario</h2>
-    
-    <!-- Información del usuario 
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title" th:text="${usuario.username}"></h5>
-            <p class="card-text">Nombre: <span th:text="${usuario.nombre}"></span></p>
-            <p class="card-text">Posts Escritos: <span th:text="${usuario.numeroPosts}"></span></p>
-            <p class="card-text">Correo: <span th:text="${usuario.email}"></span></p>
-           
-        </div>
-    </div>-->
-    
-   
-    
-  <section style="background-color: #eee;">
-  <div class="container py-5">
-    
 
-
-    <div class="row">
-      <div class="col-lg-4">
-                <div class="card mb-4">
-                    <div class="card-body text-center">
-                        <img src="../public/images/Generic-profile-picture.jpg" alt="avatar"
-                             class="rounded-circle img-fluid" style="width: 150px;">
-                        <h5 class="my-3"><span th:text="${usuario.username}"></span></h5>
-                    <div sec:authorize="isAuthenticated()">
-	    <div th:if="${#authentication.principal.username != usuario.username}">
-		<div th:if="${isSiguiendo}">
-	            <!-- Si el usuario autenticado sigue al usuario del perfil -->
-        	    <p class="text-success">Siguiendo</p>
-
-	            <form th:action="@{/perfil/{id}/unfollow(id=${usuario.id})}" method="post">
-	                <input type="hidden" name="userIdToUnfollow" th:value="${usuario.id}">
-	                <div class="d-flex justify-content-center mb-2">
-	                    <button type="submit" class="btn btn-danger">Unfollow</button>
-	                </div>
-	            </form>
-	        </div>
-		<div th:unless="${isSiguiendo}">
-	            <!-- Si el usuario autenticado NO sigue al usuario del perfil -->
-	            <form th:action="@{/perfil/{id}/follow(id=${usuario.id})}" method="post">
-	                <input type="hidden" name="userIdToFollow" th:value="${usuario.id}">
-	                <div class="d-flex justify-content-center mb-2">
-	                    <button type="submit" class="btn btn-primary">Follow</button>
-	                </div>
-	            </form>
-	        </div>
-	    </div>
-</div>
-
-
-
-
+    <section style="background-color: #eee;">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+                            <img src="../public/images/Generic-profile-picture.jpg" alt="avatar"
+                                 class="rounded-circle img-fluid" style="width: 150px;">
+                            <h5 class="my-3"><span th:text="${usuario.nombre}"></span></h5>
+                            <div sec:authorize="isAuthenticated()">
+                                <div th:if="${#authentication.principal.username != usuario.username}">
+                                    <div th:if="${isSiguiendo}">
+                                        <!-- Si el usuario autenticado sigue al usuario del perfil -->
+                                        <p class="text-success">Siguiendo</p>
+                                        <form th:action="@{/perfil/{id}/unfollow(id=${usuario.id})}" method="post">
+                                            <input type="hidden" name="userIdToUnfollow" th:value="${usuario.id}">
+                                            <div class="d-flex justify-content-center mb-2">
+                                                <button type="submit" class="btn btn-danger">Unfollow</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div th:unless="${isSiguiendo}">
+                                        <!-- Si el usuario autenticado NO sigue al usuario del perfil -->
+                                        <form th:action="@{/perfil/{id}/follow(id=${usuario.id})}" method="post">
+                                            <input type="hidden" name="userIdToFollow" th:value="${usuario.id}">
+                                            <div class="d-flex justify-content-center mb-2">
+                                                <button type="submit" class="btn btn-primary">Follow</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Botón de editar para el nombre -->
+                        </div>
                     </div>
                 </div>
-            </div>
-      <div class="col-lg-8">
-        <div class="card mb-4">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Nombre</p>
-              </div>
-              <div class="col-sm-9">
-            	<p class="card-text"><span th:text="${usuario.nombre}"></span></p>
-              </div>
-            </div>
-            <hr>    
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Email</p>
-              </div>
-              <div class="col-sm-9">
-            	<p class="card-text"><span th:text="${usuario.email}"></span></p>
-              </div>
-            </div>    
-          </div>
-        </div>
-       
-      
-        <div class="card mb-4">
+                <div class="col-lg-8">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Nombre</p>
+                                </div>
+                                <div class="col-sm-9 d-flex"  style="justify-content:space-between" >
+                                    <p class="card-text"><span th:text="${usuario.username}"></span></p>
+                                    <!-- Botón de editar para el nombre -->
+                                    <div sec:authorize="isAuthenticated()">
+                                    <button class="btn btn-primary" id="editNameBtn" th:if="${#authentication.principal.username == usuario.username}" th:onclick="'openEditNombreModal();'">Editar</button>
+                                    </div>                               
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Email</p>
+                                </div>
+                                <div class="col-sm-9 d-flex" style="justify-content:space-between">
+                                    <p class="card-text"><span th:text="${usuario.email}"></span></p>
+                                    <!-- Botón de editar para el correo electrónico -->
+                                  <div sec:authorize="isAuthenticated()">
+
+                                    <button  class="btn btn-primary" id="editEmailBtn" th:if="${#authentication.principal.username == usuario.username}" th:onclick="'openEditEmailModal();'">Editar</button>
+                          		</div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+  <div class="card mb-4">
             <div class="card-body">
                 <h5 class="card-title">Posts Escritos</h5>
                 <p class="display-4 text-center mb-4"><span th:text="${usuario.numeroPosts}"></span></p>
@@ -124,20 +110,59 @@
   </div>
 </section>
 
+</div>                </div>
+            </div>
+        </div>
+    </section>
 </div>
 
 
+<div class="modal fade" id="EditNombreModal" tabindex="-1" role="dialog" aria-labelledby="EditNombreModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+		   <form th:action="@{/usuarios/editPerfil/{id}(id=${usuario.id})}" method="post">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCategoryModalLabel">Editar Nombre Usuario</h5>
+                
+            </div>
+            <div class="modal-body">
+               <div class="form-group">
+                 <input type="hidden" th:name="id" th:value="${usuario.id}" />
+                 <input type="hidden" th:name="email" th:value="${usuario.email}" />
+		         <input type="hidden" th:name="nombre" th:value="${usuario.username}" />
+                 <label for="username">Username:</label>
+                    <input type="text" th:name="username" th:value="${usuario.nombre}" class="form-control" required />
+
+                 </div>
+            </div>
+            <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Editar</button>
+            </div>
+            </form>
+				
+        
+    </div>
+</div>
+
+</div>
 
 
+ <script>
+    function openEditNombreModal() {
 
-<script>
-   
+    $('#EditNombreModal').modal('show');
+}
+    
+   function openEditEmailModal() {
+    // Abre el modal de creación de categoría
+    $('#EditEmailModal').modal('show');
+}
+
 
 </script>
 
-
-
-
 </body>
 </html>
+
 
