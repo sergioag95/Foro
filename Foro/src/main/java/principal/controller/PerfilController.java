@@ -37,11 +37,12 @@ public class PerfilController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         
-      
-
+        if(principal!=null) {
+        	System.out.println("Texto del mensaje");
+        
         boolean isSiguiendo = usuarioService.isUserFollowing(principal.getName(), usuario.getId());
         model.addAttribute("isSiguiendo", isSiguiendo);
-        
+        }
 
         // Agrega los posts del usuario al modelo
         List<Post> postsUsuario = usuarioService.obtenerPostsPorUsuario(usuario);
