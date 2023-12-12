@@ -17,10 +17,8 @@
                 <div class="col-lg-4">
                     <div class="card mb-4">
                         <div class="card-body text-center">
-                            <img src="../public/images/Generic-profile-picture.jpg" alt="avatar"
-                                 class="rounded-circle img-fluid" style="width: 150px;">
-                            <h5 class="my-3"><span th:text="${usuario.nombre}"></span></h5>
-                             
+                           <img src="../public/images/Generic-profile-picture.jpg" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+							<h5 class="my-3"><span th:text="${usuario.nombre}"></span></h5>
                              <div class="d-flex" style="justify-content: space-evenly;"> 
                                 <!-- Sección de seguidores -->
 						    <div class="followers-section d-flex" data-toggle="modal" data-target="#followersModal" style="cursor: pointer;">
@@ -213,12 +211,14 @@
             <div class="modal-body">
                 <div class="card-columns">
                     <div th:each="seguidor : ${seguidores}" class="card mb-3">
-   						 <a th:href="@{'/perfil/' + ${seguidor.id}}" style="text-decoration: none;">
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-user-circle"></i> <span th:text="${seguidor.nombre}"></span></h5>
-                        </div>
+                        <a th:href="@{'/perfil/' + ${seguidor.id}}" style="text-decoration: none;">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-user-circle"></i> <span th:text="${seguidor.nombre}"></span></h5>
+                            </div>
                         </a>
                     </div>
+                    <!-- Texto si la lista está vacía -->
+                    <span th:if="${#lists.isEmpty(seguidores)}">No tienes seguidores.</span>
                 </div>
             </div>
         </div>
@@ -238,18 +238,20 @@
             <div class="modal-body">
                 <div class="card-columns">
                     <div th:each="seguido : ${seguidos}" class="card mb-3">
-                       <a th:href="@{'/perfil/' + ${seguido.id}}" style="text-decoration: none;">
-
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-user-circle"></i> <span th:text="${seguido.nombre}"></span></h5>
-                        </div>
-                       </a>
+                        <a th:href="@{'/perfil/' + ${seguido.id}}" style="text-decoration: none;">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-user-circle"></i> <span th:text="${seguido.nombre}"></span></h5>
+                            </div>
+                        </a>
                     </div>
+                    <!-- Texto si la lista está vacía -->
+                    <span th:if="${#lists.isEmpty(seguidos)}">No sigues a nadie.</span>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 
 
  <script>
