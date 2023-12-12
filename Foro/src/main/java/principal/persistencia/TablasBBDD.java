@@ -20,10 +20,6 @@ public class TablasBBDD {
         HiloDAO hiloDAO = new HiloDAO();
         PostDAO postDAO = new PostDAO();
 
-       
-        
-        
-        
         LocalDateTime fechaAlta = LocalDateTime.now(); // Obtén la fecha y hora actual
         String username = "admin";
 
@@ -92,8 +88,8 @@ public class TablasBBDD {
             
             
                     usuarioDAO.insertarUsuarioJPA(admin);
-                    //usuarioDAO.insertarUsuarioJPA(moderador);
-                    //usuarioDAO.insertarUsuarioJPA(usuario);
+                    usuarioDAO.insertarUsuarioJPA(moderador);
+                    usuarioDAO.insertarUsuarioJPA(usuario);
         
         
        //Usuario u1 = new Usuario();

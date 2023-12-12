@@ -29,7 +29,7 @@
                 <tr th:each="hilo : ${hilos}">
                     <td th:text="${hilo.id}"></td>
                     <td th:text="${hilo.titulo}"></td>
-                    <td th:text="${hilo.usuario.username}"></td>
+                    <td><strong><a th:text="${hilo.usuario.username}" th:href="@{/perfil/{id}(id=${hilo.usuario.id})}"></a></strong></td>
 
                     <td>
                         <a th:href="@{/hilos/{id}/posts(id=${hilo.id})}" class="btn btn-secondary">Ver posts</a>

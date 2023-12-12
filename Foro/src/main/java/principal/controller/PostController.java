@@ -1,9 +1,9 @@
 package principal.controller;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import principal.modelo.Hilo;
 import principal.modelo.Post;
@@ -159,6 +158,19 @@ public class PostController {
         post.setFecha(LocalDateTime.now());
         postService.guardarPost(post);
         return "redirect:/hilos/" + idHilo + "/verPosts";
+    }
+    
+    
+    @PostMapping("/like/{postId}")
+    public String likePost(@PathVariable Long postId, Principal principal) {
+        Post post = postService.obtenerPostPorId(postId);
+
+            post.incrementLikes();
+            postService.guardarPost(post);
+
+        
+
+        return "redirect:/hilos/"+post.getHilo().getId()+"/posts";
     }
 
 

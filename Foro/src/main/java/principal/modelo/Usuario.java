@@ -57,7 +57,7 @@ public class Usuario implements UserDetails{
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Post> posts;
     
-    
+
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
 	@JoinTable(
 			name="usuario_roles",
@@ -228,6 +228,18 @@ public class Usuario implements UserDetails{
         seguidos.remove(usuario);
         usuario.seguidores.remove(this);
     }
+
+
+	public void setSeguidos(Set<Usuario> seguidos) {
+		this.seguidos = seguidos;
+	}
+
+
+	public void setSeguidores(Set<Usuario> seguidores) {
+		this.seguidores = seguidores;
+	}
+    
+    
 	
     // Constructor, getters y setters
     

@@ -14,7 +14,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		TablasBBDD t = new TablasBBDD();
-		//t.crearTablas();
+		t.crearTablas();
 		
 		SpringApplication.run(Main.class, args);
 	

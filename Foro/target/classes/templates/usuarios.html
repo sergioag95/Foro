@@ -11,7 +11,6 @@
 <div class="container">
     <h1>Usuarios</h1>
 
-    <h2>Listado de Usuarios</h2>
     <table class="table table-striped">
         <tr>
             <th>ID</th>
@@ -25,10 +24,10 @@
             <td colspan="4">No hay usuarios registrados</td>
         </tr>
         <tr th:each="usuario : ${listaUsuarios}">
-            <td th:text="${usuario.id}"></td>
-            <td th:text="${usuario.username}"></td>
-            <td th:text="${usuario.email}"></td>
-            <td th:text="${usuario.numeroPosts}"></td>
+            <td><a th:href="@{/perfil/{id}(id=${usuario.id})}" th:text="${usuario.id}" style="text-decoration: none; color:inherit;"></a></td>
+            <td><a th:href="@{/perfil/{id}(id=${usuario.id})}" th:text="${usuario.username}" style="text-decoration: none; color:inherit;"></a></td>
+            <td><a th:href="@{/perfil/{id}(id=${usuario.id})}" th:text="${usuario.email}" style="text-decoration: none; color:inherit;"></a></td>
+            <td><a th:href="@{/perfil/{id}(id=${usuario.id})}" th:text="${usuario.numeroPosts}" style="text-decoration: none; color:inherit;"></a></td>
             <td>
                 <span th:if="${usuario.roles.contains('ROLE_ADMIN')}">Administrador</span>
                 <span th:if="${usuario.roles.contains('ROLE_MOOD')}">Moderador</span>
